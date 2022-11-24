@@ -4,10 +4,10 @@ from pathlib import Path
 from core.logger import get_logging_config_dict
 from core.utils import getenv_or_raise, strtobool
 
-# 目录
+# Base Dir
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 环境配置
+# Env
 try:
     with open(os.path.join(BASE_DIR, "env"), "r", encoding="utf-8") as env_setting_file:
         while True:
@@ -28,7 +28,7 @@ APP_CODE = getenv_or_raise("APP_CODE")
 APP_SECRET = getenv_or_raise("APP_SECRET")
 SECRET_KEY = getenv_or_raise("APP_SECRET")
 
-# 允许的host
+# Hosts
 ALLOWED_HOSTS = [getenv_or_raise("BACKEND_HOST")]
 CORS_ALLOW_CREDENTIALS = os.getenv("CORS_ALLOW_CREDENTIALS", True)
 CORS_ORIGIN_WHITELIST = [getenv_or_raise("FRONTEND_URL")]
@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     "apps.trace",
 ]
 
-# 中间件
+# MIDDLEWARE
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "core.middlewares.CSRFExemptMiddleware",
@@ -67,10 +67,10 @@ MIDDLEWARE = [
 if not DEBUG:
     MIDDLEWARE += ["core.middlewares.UnHandleExceptionMiddleware"]
 
-# 路由
+# Urls
 ROOT_URLCONF = "entry.urls"
 
-# 模板
+# TEMPLATES
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -90,7 +90,7 @@ TEMPLATES = [
 # WSGI
 WSGI_APPLICATION = "entry.wsgi.application"
 
-# 数据库与缓存
+# DB and Cache
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
@@ -115,7 +115,7 @@ CACHES = {
     }
 }
 
-# 用户认证
+# Auth
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -131,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# 国际化
+# International
 LANGUAGE_CODE = os.getenv("DEFAULT_LANGUAGE", "zh-hans")
 TIME_ZONE = os.getenv("DEFAULT_TIME_ZONE", "Asia/Shanghai")
 USE_I18N = True
@@ -140,7 +140,7 @@ USE_TZ = False
 LANGUAGES = (("zh-hans", "中文简体"),)
 LOCALE_PATHS = (os.path.join(BASE_DIR, "locale"),)
 
-# 静态文件
+# Static
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "staticfiles")]
@@ -153,7 +153,7 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
 SESSION_COOKIE_DOMAIN = os.getenv("SESSION_COOKIE_DOMAIN")
 AUTH_TOKEN_NAME = os.getenv("AUTH_TOKEN_NAME", f"{'dev-' if DEBUG else ''}{APP_CODE}-auth-token")
 
-# 日志
+# Log
 LOG_LEVEL = "INFO"
 LOG_DIR = os.path.join(BASE_DIR, "logs")
 LOGGING = get_logging_config_dict(LOG_LEVEL, LOG_DIR)

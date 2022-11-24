@@ -10,3 +10,6 @@ env
 
 # Log
 *.log
+
+# Static
+static

@@ -6,7 +6,9 @@ from core.viewsets import MainViewSet
 
 
 class HomeView(MainViewSet):
-    """首页入口"""
+    """
+    Home View
+    """
 
     queryset = User.get_queryset()
     authentication_classes = [SessionAuthenticate]
