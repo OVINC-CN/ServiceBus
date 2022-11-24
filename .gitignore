@@ -1,0 +1,15 @@
+# IDE
+.idea
+
+# Env
+env
+
+# Python
+*.pyc
+*.db
+
+# Log
+*.log
+
+# Static
+static
