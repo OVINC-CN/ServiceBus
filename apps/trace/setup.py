@@ -22,6 +22,8 @@ class TraceHandler:
     def setup():
         # use command below to start a local jaeger for trace log
         # docker run -p 16686:16686 -p 6831:6831/udp jaegertracing/all-in-one
+        # use command below to change udp max dgram
+        # sudo sysctl -w net.inet.udp.maxdgram=65535
         service_name = ServiceNameHandler(settings.SERVICE_NAME).get_service_name()
         trace.set_tracer_provider(TracerProvider(resource=Resource.create({SERVICE_NAME: service_name})))
         jaeger_exporter = JaegerExporter(

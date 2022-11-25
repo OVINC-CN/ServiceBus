@@ -142,3 +142,8 @@ class Error404(APIException):
 class ServiceClosed(APIException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     default_detail = gettext_lazy("Service Closed")
+
+
+class AuthTokenInvalid(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = gettext_lazy("Auth Token Invalid")
