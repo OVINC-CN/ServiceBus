@@ -11,6 +11,8 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.handlers.wsgi import WSGIRequest
 
+from core.exceptions import AuthTokenInvalid
+
 
 def uniq_id() -> str:
     """
@@ -24,7 +26,7 @@ def uniq_id() -> str:
     return f"{time_str}{uniq}"
 
 
-def get_auth_token(uid: str, timeout: int = None) -> str:
+def get_auth_token(username: str, timeout: int = None) -> str:
     """
     Create Auth Token
     """
@@ -33,9 +35,21 @@ def get_auth_token(uid: str, timeout: int = None) -> str:
     in_use = cache.get(uniq)
     if in_use is None:
         timeout = timeout or settings.SESSION_COOKIE_AGE
-        cache.set(uniq, uid, timeout)
+        cache.set(uniq, username, timeout)
         return uniq
-    return get_auth_token(uid)
+    return get_auth_token(username)
+
+
+def remove_auth_token(username: str, token: str) -> None:
+    """
+    Remove Auth Token from Cache
+    """
+
+    _username = cache.get(token)
+    if _username == username:
+        cache.delete(token)
+    else:
+        raise AuthTokenInvalid()
 
 
 def simple_uniq_id(length: int) -> str:

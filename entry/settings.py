@@ -38,7 +38,6 @@ FRONTEND_URL = getenv_or_raise("FRONTEND_URL")
 # APPs
 INSTALLED_APPS = [
     "corsheaders",
-    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -58,7 +57,6 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -171,6 +169,7 @@ REST_FRAMEWORK = {
 
 # User
 AUTH_USER_MODEL = "account.User"
+AUTHENTICATION_BACKENDS = ["apps.account.backends.ModelBackend"]
 
 # Celery
 CELERY_TIMEZONE = "Asia/Shanghai"

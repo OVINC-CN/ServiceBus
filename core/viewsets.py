@@ -38,8 +38,8 @@ class MainViewSet(GenericViewSet):
         # Record Request
         try:
 
-            if hasattr(request, "user") and hasattr(request.user, "uid"):
-                user = f"{request.user.username}({request.user.uid})"
+            if hasattr(request, "user") and hasattr(request.user, "username") and hasattr(request.user, "nick_name"):
+                user = f"{request.user.username}({request.user.nick_name})"
             else:
                 user = str(getattr(request, "user", ""))
             logger.info(

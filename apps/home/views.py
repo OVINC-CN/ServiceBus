@@ -1,8 +1,11 @@
+from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 
 from apps.account.models import User
 from core.auth import SessionAuthenticate
 from core.viewsets import MainViewSet
+
+USER_MODEL: User = get_user_model()
 
 
 class HomeView(MainViewSet):
@@ -10,7 +13,7 @@ class HomeView(MainViewSet):
     Home View
     """
 
-    queryset = User.get_queryset()
+    queryset = USER_MODEL.get_queryset()
     authentication_classes = [SessionAuthenticate]
 
     def response(self, request):
