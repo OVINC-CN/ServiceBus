@@ -169,7 +169,7 @@ REST_FRAMEWORK = {
 
 # User
 AUTH_USER_MODEL = "account.User"
-AUTHENTICATION_BACKENDS = ["apps.account.backends.ModelBackend"]
+AUTHENTICATION_BACKENDS = ["apps.account.backends.ModelBackend", "apps.account.backends.TokenBackend"]
 
 # Celery
 CELERY_TIMEZONE = "Asia/Shanghai"

@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from apps.account.exceptions import WrongSignInParam
+from apps.account.exceptions import WrongSignInParam, WrongToken
 from apps.account.models import User, UserProperty
 from apps.account.serializers import (
     SignInSerializer,
@@ -13,6 +13,7 @@ from apps.account.serializers import (
     UserPropertyDeleteSerializer,
     UserPropertyRequestSerializer,
     UserPropertySerializer,
+    VerifyUserTokenRequestSerializer,
 )
 from core.auth import SessionAuthenticate
 from core.utils import get_auth_token, remove_auth_token
@@ -148,3 +149,23 @@ class UserSignViewSet(MainViewSet):
         remove_auth_token(request.user.username, request.COOKIES.get(settings.AUTH_TOKEN_NAME))
 
         return response
+
+    @action(methods=["POST"], detail=False, authentication_classes=[])
+    def verify_token(self, request, *args, **kwargs):
+        """
+        Verify User Token
+        """
+
+        # Validate Request Data
+        request_serializer = VerifyUserTokenRequestSerializer(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        request_data = request_serializer.validated_data
+
+        # Check Token
+        user = auth.authenticate(request, **request_data)
+        if not user:
+            raise WrongToken()
+
+        # Response
+        serializer = UserInfoSerializer(instance=user)
+        return Response(serializer.data)

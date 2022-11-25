@@ -62,3 +62,11 @@ class SignInSerializer(serializers.Serializer):
 
     username = serializers.CharField(label=gettext_lazy("Username"))
     password = serializers.CharField(label=gettext_lazy("password"))
+
+
+class VerifyUserTokenRequestSerializer(serializers.Serializer):
+    """
+    Verify User Token
+    """
+
+    token = serializers.CharField(label=gettext_lazy("Auth Token"))
