@@ -18,7 +18,6 @@ jobs:
     - name: Login to Tcloud TCR
       uses: docker/login-action@v2
       with:
-        registry: ccr.ccs.tencentyun.com
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
     - name: Docker meta
