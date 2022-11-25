@@ -135,7 +135,7 @@ TIME_ZONE = os.getenv("DEFAULT_TIME_ZONE", "Asia/Shanghai")
 USE_I18N = True
 USE_L10N = True
 USE_TZ = False
-LANGUAGES = (("zh-hans", "中文简体"),)
+LANGUAGES = (("zh-hans", "中文简体"), ("en", "English"))
 LOCALE_PATHS = (os.path.join(BASE_DIR, "locale"),)
 
 # Static
@@ -169,7 +169,7 @@ REST_FRAMEWORK = {
 
 # User
 AUTH_USER_MODEL = "account.User"
-AUTHENTICATION_BACKENDS = ["apps.account.backends.ModelBackend"]
+AUTHENTICATION_BACKENDS = ["apps.account.backends.ModelBackend", "apps.account.backends.TokenBackend"]
 
 # Celery
 CELERY_TIMEZONE = "Asia/Shanghai"
