@@ -151,7 +151,7 @@ def get_md5(content):
     if isinstance(content, dict):
         return get_md5([(str(k), get_md5(content[k])) for k in sorted(content.keys())])
     elif isinstance(content, (list, tuple)):
-        content = sorted([get_md5(k) for k in content])
+        content = sorted(get_md5(k) for k in content)
 
     content = str(content)
     m = md5()

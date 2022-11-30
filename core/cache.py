@@ -36,12 +36,14 @@ class CacheItem:
         return "{}:{}:{}".format(
             self.name,
             self.username,
-            get_md5([
-                get_md5(self.request.query_params),
-                get_md5(self.request.data),
-                get_md5(self.args),
-                get_md5(self.kwargs)
-            ])
+            get_md5(
+                [
+                    get_md5(self.request.query_params),
+                    get_md5(self.request.data),
+                    get_md5(self.args),
+                    get_md5(self.kwargs),
+                ]
+            ),
         )
 
     def set_cache(self, data: Union[list, dict]) -> None:
