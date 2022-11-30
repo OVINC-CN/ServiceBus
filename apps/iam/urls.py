@@ -1,0 +1,16 @@
+from rest_framework.routers import DefaultRouter
+
+from apps.iam.views import (
+    IAMActionViewSet,
+    IAMInstanceAppViewSet,
+    IAMInstanceViewSet,
+    UserPermissionViewSet,
+)
+
+router = DefaultRouter()
+router.register("action", IAMActionViewSet)
+router.register("instance", IAMInstanceViewSet)
+router.register("instance_manage", IAMInstanceAppViewSet)
+router.register("user", UserPermissionViewSet)
+
+urlpatterns = router.urls

@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 from django.contrib.auth import get_user_model
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.account.models import User
@@ -91,3 +92,12 @@ class ApplicationViewSet(ListMixin, CreateMixin, UpdateMixin, DestroyMixin, Main
         # response
         serializer = ApplicationUpdateResponseSerializer(instance)
         return Response(serializer.data)
+
+    @action(methods=["GET"], detail=False)
+    def all(self, request, *args, **kwargs):
+        """
+        list all applications
+        """
+
+        self.pagination_class = None
+        return super().list(request, *args, **kwargs)

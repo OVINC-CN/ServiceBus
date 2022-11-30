@@ -9,6 +9,7 @@ urlpatterns = [
     path("", include("apps.home.urls")),
     path("account/", include("apps.account.urls")),
     path("application/", include("apps.application.urls")),
+    path("iam/", include("apps.iam.urls")),
 ]
 
 handler400 = exceptions.bad_request

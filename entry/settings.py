@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "apps.application",
     "apps.cel",
     "apps.home",
+    "apps.iam",
     "apps.trace",
 ]
 
