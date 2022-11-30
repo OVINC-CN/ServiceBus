@@ -4,11 +4,12 @@ from rest_framework import mixins
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from core.cache import CacheMixin
 from core.logger import logger
 from core.utils import get_ip
 
 
-class MainViewSet(GenericViewSet):
+class MainViewSet(CacheMixin, GenericViewSet):
     """
     Base ViewSet
     """
@@ -28,7 +29,19 @@ class MainViewSet(GenericViewSet):
             else:
                 handler = self.http_method_not_allowed
 
-            response = handler(request, *args, **kwargs)
+            # cache
+            if self.enable_cache:
+                has_cache, cache_data = self.get_cache(request, *args, **kwargs)
+                # has cache, return directly
+                if has_cache:
+                    response = Response(cache_data)
+                # no cache, perform request and set cache
+                else:
+                    response = handler(request, *args, **kwargs)
+                    self.set_cache(response.data, request, *args, **kwargs)
+            # no cache
+            else:
+                response = handler(request, *args, **kwargs)
 
         except Exception as exc:
             response = self.handle_exception(exc)
