@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import ForeignKey as _ForeignKey
 from django.db.models import IntegerChoices as _IntegerChoices
+from django.db.models import ManyToManyField as _ManyToManyField
 from django.db.models import QuerySet
 from django.db.models import TextChoices as _TextChoices
 from django.utils.translation import gettext_lazy
@@ -51,7 +52,7 @@ class ForeignKey(_ForeignKey):
         related_name: str = None,
         related_query_name: str = None,
         db_constraint: str = False,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             to=to,
@@ -60,6 +61,30 @@ class ForeignKey(_ForeignKey):
             related_query_name=related_query_name,
             db_constraint=db_constraint,
             verbose_name=verbose_name,
+            **kwargs,
+        )
+
+
+class ManyToManyField(_ManyToManyField):
+    """
+    ManyToManyField
+    """
+
+    def __init__(
+        self,
+        verbose_name: str,
+        to: str,
+        related_name: str = None,
+        related_query_name: str = None,
+        db_constraint: bool = False,
+        **kwargs,
+    ):
+        super().__init__(
+            verbose_name=verbose_name,
+            to=to,
+            related_name=related_name,
+            related_query_name=related_query_name,
+            db_constraint=db_constraint,
             **kwargs,
         )
 

@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Env
 try:
-    with open(os.path.join(BASE_DIR, "env"), "r", encoding="utf-8") as env_setting_file:
+    with open(os.path.join(BASE_DIR, "env"), encoding="utf-8") as env_setting_file:
         while True:
             env_setting = env_setting_file.readline()
             if env_setting:
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "apps.account",
+    "apps.application",
     "apps.cel",
     "apps.home",
     "apps.trace",
