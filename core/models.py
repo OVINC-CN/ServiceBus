@@ -6,6 +6,10 @@ from django.db.models import TextChoices as _TextChoices
 from django.utils.translation import gettext_lazy
 
 
+class Empty:
+    ...
+
+
 class IntegerChoices(_IntegerChoices):
     """
     Int Choices
