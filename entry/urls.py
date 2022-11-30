@@ -8,6 +8,7 @@ urlpatterns = [
     path("favicon.ico", RedirectView.as_view(url=f"{settings.FRONTEND_URL}/favicon.ico")),
     path("", include("apps.home.urls")),
     path("account/", include("apps.account.urls")),
+    path("application/", include("apps.application.urls")),
 ]
 
 handler400 = exceptions.bad_request

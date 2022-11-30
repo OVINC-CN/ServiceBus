@@ -25,7 +25,7 @@ class CacheItem:
     def username(self):
         if self.user_bind:
             return self.request.user.username
-        return str()
+        return ""
 
     @property
     def cache_key(self) -> str:
