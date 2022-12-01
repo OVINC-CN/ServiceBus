@@ -18,6 +18,11 @@ MAX_PAGE_SIZE = 100
 # Cache
 DEFAULT_CACHE_TIMEOUT = 60
 
+# App Auth
+APP_AUTH_HEADER_KEY = "HTTP_OVINC_APP"
+APP_AUTH_ID_KEY = "app_code"
+APP_AUTH_SECRET_KEY = "app_secret"
+
 
 # Request
 class ViewActionChoices(TextChoices):

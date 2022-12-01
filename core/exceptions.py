@@ -44,7 +44,11 @@ def exception_handler(exc, context) -> Union[JsonResponse, None]:
             msg = ""
             for err in data:
                 for field, val in err.items():
-                    msg += "[{}]{}".format(get_field_name(err.serializer, field), "".join(val))
+                    try:
+                        msg_val = "".join(val)
+                    except TypeError:
+                        msg_val = str(val)
+                    msg += "[{}]{}".format(get_field_name(err.serializer, field), msg_val)
         elif isinstance(exc.detail, (list, dict)):
             data = exc.detail
             msg = gettext("Request Failed")
@@ -147,3 +151,8 @@ class ServiceClosed(APIException):
 class AuthTokenInvalid(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = gettext_lazy("Auth Token Invalid")
+
+
+class AppAuthFailed(APIException):
+    status_code = status.HTTP_403_FORBIDDEN
+    default_detail = gettext_lazy("App Auth Failed")

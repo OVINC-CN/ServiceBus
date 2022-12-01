@@ -14,7 +14,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from core.exceptions import AuthTokenInvalid
 
 
-def uniq_id() -> str:
+def uniq_id(with_time=True) -> str:
     """
     Create Uniq ID
     """
@@ -23,7 +23,15 @@ def uniq_id() -> str:
     m.update(str(int(time.time() * 1000)).encode())
     time_str = str(m.hexdigest())
     uniq = str(uuid.uuid3(uuid.uuid1(), uuid.uuid4().hex).hex)
-    return f"{time_str}{uniq}"
+    return f"{time_str if with_time else ''}{uniq}"
+
+
+def uniq_id_without_time() -> str:
+    """
+    Create Uniq ID
+    """
+
+    return uniq_id(False)
 
 
 def get_auth_token(username: str, timeout: int = None) -> str:

@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy
 from rest_framework.permissions import BasePermission
 
-from apps.application.models import Application
+from apps.application.models import Application, ApplicationManager
 from core.exceptions import PermissionDenied
 
 
@@ -22,10 +22,6 @@ class ApplicationManagePermission(BasePermission):
     """
 
     def has_object_permission(self, request, view, obj: Application):
-        # load managers
-        managers = obj.applicationmanager_set.all().values_list("manager", flat=True)
-
-        # check permission
-        if request.user.username in managers:
+        if ApplicationManager.objects.filter(application=obj, manager=request.user).exists():
             return True
         raise PermissionDenied(gettext_lazy("App Manager Permission Required"))

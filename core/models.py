@@ -1,10 +1,13 @@
 from django.db import models
+from django.db.models import CharField
 from django.db.models import ForeignKey as _ForeignKey
 from django.db.models import IntegerChoices as _IntegerChoices
 from django.db.models import ManyToManyField as _ManyToManyField
 from django.db.models import QuerySet
 from django.db.models import TextChoices as _TextChoices
 from django.utils.translation import gettext_lazy
+
+from core.utils import uniq_id_without_time
 
 
 class Empty:
@@ -37,6 +40,14 @@ class TextChoices(_TextChoices):
         """
 
         return self._value_
+
+
+class UniqIDField(CharField):
+    def __init__(self, verbose_name, **kwargs):
+        from core.constants import SHORT_CHAR_LENGTH
+
+        kwargs.update({"primary_key": True, "max_length": SHORT_CHAR_LENGTH, "default": uniq_id_without_time})
+        super().__init__(verbose_name, **kwargs)
 
 
 class ForeignKey(_ForeignKey):
