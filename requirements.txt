@@ -38,3 +38,6 @@ pycryptodome==3.15.0
 
 # Request
 requests==2.27.1
+
+# Profile
+pyinstrument==4.4.0

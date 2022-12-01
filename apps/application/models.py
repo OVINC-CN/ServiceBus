@@ -1,5 +1,6 @@
 from typing import List
 
+from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy
@@ -60,14 +61,19 @@ class Application(SoftDeletedModel):
         check secret
         """
 
-        return check_password(raw_secret, self.app_secret)
+        if settings.ENCRYPT_APP_SECRET:
+            return check_password(raw_secret, self.app_secret)
+        return raw_secret == self.app_secret
 
     def set_secret(self, raw_secret: str) -> None:
         """
         set secret
         """
 
-        self.app_secret = make_password(raw_secret)
+        if settings.ENCRYPT_APP_SECRET:
+            self.app_secret = make_password(raw_secret)
+        else:
+            self.app_secret = raw_secret
         self.save(update_fields=["app_secret"])
 
 

@@ -64,6 +64,9 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
     "core.middlewares.SQLDebugMiddleware",
 ]
+if DEBUG:
+    MIDDLEWARE += ["pyinstrument.middleware.ProfilerMiddleware"]
+    PYINSTRUMENT_PROFILE_DIR = ".report"
 if not DEBUG:
     MIDDLEWARE += ["core.middlewares.UnHandleExceptionMiddleware"]
 
@@ -172,6 +175,10 @@ REST_FRAMEWORK = {
 # User
 AUTH_USER_MODEL = "account.User"
 AUTHENTICATION_BACKENDS = ["apps.account.backends.ModelBackend", "apps.account.backends.TokenBackend"]
+
+# App
+# enable will spend extra time at app request
+ENCRYPT_APP_SECRET = strtobool(os.getenv("ENCRYPT_APP_SECRET", "False"))
 
 # Celery
 CELERY_TIMEZONE = "Asia/Shanghai"
