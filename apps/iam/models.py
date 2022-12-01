@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy
 
 from apps.iam.constants import PermissionStatusChoices
 from core.constants import SHORT_CHAR_LENGTH
-from core.models import BaseModel, ForeignKey
+from core.models import BaseModel, ForeignKey, UniqIDField
 
 
 class Action(BaseModel):
@@ -11,6 +11,7 @@ class Action(BaseModel):
     Action
     """
 
+    id = UniqIDField(gettext_lazy("ID"))
     application = ForeignKey(gettext_lazy("Application"), to="application.Application", on_delete=models.CASCADE)
     action_id = models.CharField(gettext_lazy("Action ID"), max_length=SHORT_CHAR_LENGTH)
     action_name = models.CharField(gettext_lazy("Action Name"), max_length=SHORT_CHAR_LENGTH)
@@ -29,6 +30,7 @@ class Instance(BaseModel):
     Instance
     """
 
+    id = UniqIDField(gettext_lazy("ID"))
     action = ForeignKey(gettext_lazy("Action"), to="iam.Action", on_delete=models.CASCADE)
     instance_id = models.CharField(gettext_lazy("Instance ID"), max_length=SHORT_CHAR_LENGTH)
     instance_name = models.CharField(gettext_lazy("Instance Name"), max_length=SHORT_CHAR_LENGTH)
@@ -45,6 +47,7 @@ class UserPermission(BaseModel):
     User Permission
     """
 
+    id = UniqIDField(gettext_lazy("ID"))
     user = ForeignKey(gettext_lazy("User"), to="account.User", on_delete=models.CASCADE)
     action = ForeignKey(gettext_lazy("Action"), to="iam.Action", on_delete=models.CASCADE)
     instances = models.JSONField(gettext_lazy("Instances"), default=list, null=True)

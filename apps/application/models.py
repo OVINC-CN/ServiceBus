@@ -6,7 +6,13 @@ from django.utils.translation import gettext_lazy
 
 from apps.account.models import User
 from core.constants import SHORT_CHAR_LENGTH
-from core.models import BaseModel, ForeignKey, SoftDeletedManager, SoftDeletedModel
+from core.models import (
+    BaseModel,
+    ForeignKey,
+    SoftDeletedManager,
+    SoftDeletedModel,
+    UniqIDField,
+)
 
 
 class ApplicationObjects(SoftDeletedManager):
@@ -70,6 +76,7 @@ class ApplicationManager(BaseModel):
     Application Manager
     """
 
+    id = UniqIDField(gettext_lazy("ID"))
     application = ForeignKey(gettext_lazy("Application"), to="application.Application", on_delete=models.CASCADE)
     manager = ForeignKey(gettext_lazy("Manager"), to="account.User", on_delete=models.CASCADE)
 
