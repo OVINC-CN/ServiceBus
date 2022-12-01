@@ -81,8 +81,8 @@ class ApplyPermissionSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs: dict) -> dict:
         attrs = super().validate(attrs)
-        attrs["instances"] = Instance.objects.filter(pk__in=attrs["instances"], action=attrs["action"]).values_list(
-            "id", flat=True
+        attrs["instances"] = list(
+            Instance.objects.filter(pk__in=attrs["instances"], action=attrs["action"]).values_list("id", flat=True)
         )
         return attrs
 

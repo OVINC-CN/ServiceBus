@@ -124,7 +124,11 @@ class ManagerUserPermissionViewSet(ListMixin, CreateMixin, MainViewSet):
 
         # load data
         action_ids = Action.objects.filter(application_id=application_id).values_list("id", flat=True)
-        user_permissions = UserPermission.objects.filter(action_id__in=action_ids).select_related("action")
+        user_permissions = (
+            UserPermission.objects.filter(action_id__in=action_ids)
+            .select_related("action")
+            .order_by("-status", "-update_at")
+        )
 
         # page
         page = self.paginate_queryset(user_permissions)
@@ -152,7 +156,11 @@ class ManagerUserPermissionViewSet(ListMixin, CreateMixin, MainViewSet):
         status = request_serializer.validated_data["status"]
 
         # save
-        UserPermission.objects.filter(id=permission_id, status=PermissionStatusChoices.DEALING).update(status=status)
+        queryset = UserPermission.objects.filter(id=permission_id, status=PermissionStatusChoices.DEALING)
+        if status == PermissionStatusChoices.ALLOWED.value:
+            queryset.update(status=status)
+        elif status == PermissionStatusChoices.DENIED.value:
+            queryset.delete()
 
         return Response()
 

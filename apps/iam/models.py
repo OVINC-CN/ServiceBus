@@ -21,7 +21,7 @@ class Action(BaseModel):
     class Meta:
         verbose_name = gettext_lazy("Action")
         verbose_name_plural = verbose_name
-        ordering = ["-id"]
+        ordering = ["id"]
         unique_together = [["application", "action_id"]]
 
 
@@ -38,7 +38,7 @@ class Instance(BaseModel):
     class Meta:
         verbose_name = gettext_lazy("Resource")
         verbose_name_plural = verbose_name
-        ordering = ["-id"]
+        ordering = ["id"]
         unique_together = [["action", "instance_id"]]
 
 
@@ -58,10 +58,11 @@ class UserPermission(BaseModel):
         choices=PermissionStatusChoices.choices,
         default=PermissionStatusChoices.DEALING,
     )
+    update_at = models.DateTimeField(gettext_lazy("Update At"), auto_now=True)
 
     class Meta:
         verbose_name = gettext_lazy("User Permission")
         verbose_name_plural = verbose_name
-        ordering = ["-id"]
+        ordering = ["action", "-update_at"]
         index_together = [["user", "action", "status"]]
         unique_together = [["user", "action"]]

@@ -84,4 +84,4 @@ class ApplicationManager(BaseModel):
         verbose_name = gettext_lazy("Application Manager")
         verbose_name_plural = verbose_name
         unique_together = ["application", "manager"]
-        ordering = ["-id"]
+        ordering = ["id"]
