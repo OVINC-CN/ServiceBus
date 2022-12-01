@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-25 21:09+0800\n"
+"POT-Creation-Date: 2022-12-01 14:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,7 +70,7 @@ msgstr "用户类型"
 msgid "Date Joined"
 msgstr "注册时间"
 
-#: apps/account/models.py:61 apps/account/models.py:105
+#: apps/account/models.py:61 apps/account/models.py:105 apps/iam/models.py:51
 msgid "User"
 msgstr "用户"
 
@@ -91,7 +91,8 @@ msgstr "用户配置"
 msgid "Property Keys"
 msgstr "配置键"
 
-#: apps/account/serializers.py:63
+#: apps/account/serializers.py:63 apps/application/serializers.py:65
+#: apps/iam/serializers/user.py:126
 msgid "Username"
 msgstr "用户名"
 
@@ -102,6 +103,60 @@ msgstr "密码"
 #: apps/account/serializers.py:72
 msgid "Auth Token"
 msgstr "认证 Token"
+
+#: apps/application/apps.py:8 apps/application/models.py:54
+#: apps/application/models.py:80 apps/iam/models.py:15
+msgid "Application"
+msgstr "应用"
+
+#: apps/application/models.py:47
+msgid "App Name"
+msgstr "应用名称"
+
+#: apps/application/models.py:48 apps/application/serializers.py:58
+msgid "App Code"
+msgstr "应用ID"
+
+#: apps/application/models.py:49
+msgid "App Secret (Encoded)"
+msgstr "应用密码(加密)"
+
+#: apps/application/models.py:79 apps/iam/models.py:14 apps/iam/models.py:33
+#: apps/iam/models.py:50
+msgid "ID"
+msgstr "ID"
+
+#: apps/application/models.py:81
+msgid "Manager"
+msgstr "管理员"
+
+#: apps/application/models.py:84
+msgid "Application Manager"
+msgstr "应用管理员"
+
+#: apps/application/permissions.py:16
+msgid "Admin Permission Required"
+msgstr "需要管理员权限"
+
+#: apps/application/permissions.py:27
+msgid "App Manager Permission Required"
+msgstr "需要应用管理员权限"
+
+#: apps/application/serializers.py:61
+msgid "only support digit, characters, -, _"
+msgstr "仅支持字母、数字、-、_"
+
+#: apps/application/serializers.py:63
+msgid "App Secret"
+msgstr "应用密钥"
+
+#: apps/application/serializers.py:65
+msgid "Managers"
+msgstr "管理员"
+
+#: apps/application/serializers.py:75
+msgid "managers cannot be null"
+msgstr "管理员不能为空"
 
 #: apps/home/apps.py:8
 msgid "Home Module"
@@ -115,47 +170,183 @@ msgstr "认证 Token 非法"
 msgid "Language Code"
 msgstr "语言ID"
 
+#: apps/iam/apps.py:8 apps/iam/models.py:64
+msgid "User Permission"
+msgstr "用户权限"
+
+#: apps/iam/constants.py:7
+msgid "denied"
+msgstr "已拒绝"
+
+#: apps/iam/constants.py:8
+msgid "allowed"
+msgstr "已授权"
+
+#: apps/iam/constants.py:9
+msgid "dealing"
+msgstr "处理中"
+
+#: apps/iam/models.py:16 apps/iam/serializers/instance.py:22
+#: apps/iam/serializers/user.py:34 apps/iam/serializers/user.py:115
+msgid "Action ID"
+msgstr "操作ID"
+
+#: apps/iam/models.py:17 apps/iam/serializers/user.py:35
+msgid "Action Name"
+msgstr "操作名称"
+
+#: apps/iam/models.py:18 apps/iam/serializers/user.py:36
+msgid "Resource Name"
+msgstr "资源名称"
+
+#: apps/iam/models.py:19 apps/iam/serializers/user.py:37
+msgid "Description"
+msgstr "描述"
+
+#: apps/iam/models.py:22 apps/iam/models.py:34 apps/iam/models.py:52
+msgid "Action"
+msgstr "操作"
+
+#: apps/iam/models.py:35 apps/iam/serializers/user.py:117
+msgid "Instance ID"
+msgstr "实例ID"
+
+#: apps/iam/models.py:36
+msgid "Instance Name"
+msgstr "实例名称"
+
+#: apps/iam/models.py:39
+msgid "Resource"
+msgstr "资源"
+
+#: apps/iam/models.py:53 apps/iam/serializers/user.py:38
+#: apps/iam/serializers/user.py:117
+msgid "Instances"
+msgstr "实例"
+
+#: apps/iam/models.py:54
+msgid "All Instances"
+msgstr "全部实例"
+
+#: apps/iam/models.py:56
+msgid "Status"
+msgstr "状态"
+
+#: apps/iam/models.py:61
+msgid "Update At"
+msgstr "更新时间"
+
+#: apps/iam/permissions.py:22 apps/iam/permissions.py:38
+#: apps/iam/permissions.py:107 apps/iam/permissions.py:115
+msgid "Application Manager Permission Required"
+msgstr "需要应用管理员权限"
+
+#: apps/iam/permissions.py:72 apps/iam/permissions.py:83
+msgid "Unauthorized App for Action"
+msgstr "未授权应用"
+
+#: apps/iam/permissions.py:94
+msgid "You are not allowed to update this permission"
+msgstr "禁止更新该权限"
+
+#: apps/iam/serializers/action.py:22 apps/iam/serializers/action.py:50
+#: apps/iam/serializers/user.py:26 apps/iam/serializers/user.py:135
+msgid "Application ID"
+msgstr "应用ID"
+
+#: apps/iam/serializers/user.py:127
+msgid "Permissions"
+msgstr "权限"
+
+#: apps/iam/serializers/user.py:143
+msgid "Permission ID"
+msgstr "权限ID"
+
+#: apps/iam/serializers/user.py:144
+msgid "Permission Status"
+msgstr "权限状态"
+
 #: apps/trace/apps.py:11
 msgid "App Performance"
 msgstr "应用性能"
 
-#: core/exceptions.py:50
+#: core/auth.py:65
+msgid "App Auth Params is not Json"
+msgstr "应用鉴权参数不是JSON"
+
+#: core/auth.py:69
+msgid "App Auth Params Not Exist"
+msgstr "应用鉴权参数不存在"
+
+#: core/auth.py:74
+msgid "App Not Exist"
+msgstr "应用不存在"
+
+#: core/auth.py:78
+msgid "App Code or Secret Incorrect"
+msgstr "应用ID或者密钥不正确"
+
+#: core/constants.py:29
+msgid "LIST"
+msgstr "LIST"
+
+#: core/constants.py:30
+msgid "CREATE"
+msgstr "CREATE"
+
+#: core/constants.py:31
+msgid "UPDATE"
+msgstr "UPDATE"
+
+#: core/constants.py:32
+msgid "PARTIAL_UPDATE"
+msgstr "PARTIAL_UPDATE"
+
+#: core/constants.py:33
+msgid "DESTROY"
+msgstr "DESTROY"
+
+#: core/exceptions.py:54
 msgid "Request Failed"
 msgstr "请求失败"
 
-#: core/exceptions.py:114
+#: core/exceptions.py:118
 msgid "Server Error"
 msgstr "服务错误"
 
-#: core/exceptions.py:119
+#: core/exceptions.py:123
 msgid "Login Required"
 msgstr "未登录"
 
-#: core/exceptions.py:124
+#: core/exceptions.py:128
 msgid "Login Failed"
 msgstr "登录失败"
 
-#: core/exceptions.py:129
+#: core/exceptions.py:133
 msgid "Permission Denied"
 msgstr "未经授权访问"
 
-#: core/exceptions.py:134
+#: core/exceptions.py:138
 msgid "Operate Error"
 msgstr "异常操作"
 
-#: core/exceptions.py:139
+#: core/exceptions.py:143
 msgid "Resource Not Found"
 msgstr "资源未找到"
 
-#: core/exceptions.py:144
+#: core/exceptions.py:148
 msgid "Service Closed"
 msgstr "服务维护中"
 
-#: core/exceptions.py:149
+#: core/exceptions.py:153
 msgid "Auth Token Invalid"
 msgstr "认证 Token 非法"
 
-#: core/models.py:109
+#: core/exceptions.py:158
+msgid "App Auth Failed"
+msgstr "应用鉴权失败"
+
+#: core/models.py:149
 msgid "Soft Delete"
 msgstr "软删除"
 
