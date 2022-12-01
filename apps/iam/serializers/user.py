@@ -3,6 +3,7 @@ from typing import List
 from django.utils.translation import gettext_lazy
 from rest_framework import serializers
 
+from apps.iam.constants import PermissionStatusChoices
 from apps.iam.models import Instance, UserPermission
 from apps.iam.serializers import InstanceSerializer
 
@@ -104,3 +105,40 @@ class UpdatePermissionSerializer(serializers.ModelSerializer):
                 )
             )
         return attrs
+
+
+class PermissionItemSerializer(serializers.Serializer):
+    """
+    Permission Item
+    """
+
+    action = serializers.CharField(label=gettext_lazy("Action ID"))
+    instances = serializers.ListSerializer(
+        label=gettext_lazy("Instances"), child=serializers.CharField(label=gettext_lazy("Instance ID"))
+    )
+
+
+class CheckPermissionSerializer(serializers.Serializer):
+    """
+    Check Permission
+    """
+
+    username = serializers.CharField(label=gettext_lazy("Username"))
+    permissions = PermissionItemSerializer(label=gettext_lazy("Permissions"), many=True)
+
+
+class ManagePermissionSerializer(serializers.Serializer):
+    """
+    Manage Permission
+    """
+
+    application_id = serializers.CharField(label=gettext_lazy("Application ID"))
+
+
+class ManagePermissionApplySerializer(serializers.Serializer):
+    """
+    Manager Permission Apply
+    """
+
+    permission_id = serializers.CharField(label=gettext_lazy("Permission ID"))
+    status = serializers.ChoiceField(label=gettext_lazy("Permission Status"), choices=PermissionStatusChoices.choices)

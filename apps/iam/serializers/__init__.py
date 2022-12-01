@@ -13,6 +13,9 @@ from apps.iam.serializers.instance import (
 )
 from apps.iam.serializers.user import (
     ApplyPermissionSerializer,
+    CheckPermissionSerializer,
+    ManagePermissionApplySerializer,
+    ManagePermissionSerializer,
     UpdatePermissionSerializer,
     UserPermissionListRequestSerializer,
     UserPermissionListSerializer,
@@ -34,4 +37,7 @@ __all__ = [
     "UserPermissionListRequestSerializer",
     "ApplyPermissionSerializer",
     "UpdatePermissionSerializer",
+    "CheckPermissionSerializer",
+    "ManagePermissionSerializer",
+    "ManagePermissionApplySerializer",
 ]
