@@ -164,7 +164,7 @@ msgstr "首页"
 
 #: apps/home/exceptions.py:8
 msgid "Language Code Invalid"
-msgstr "认证 Token 非法"
+msgstr "语言ID非法"
 
 #: apps/home/serializers.py:12
 msgid "Language Code"
