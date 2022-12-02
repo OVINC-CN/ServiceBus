@@ -17,6 +17,9 @@ uwsgi==2.0.20
 # Datetime
 arrow==1.2.3
 
+# tencent cloud
+tencentcloud-sdk-python==3.0.785
+
 # OT
 protobuf==3.19.5
 opentelemetry-api==1.11.1

@@ -53,6 +53,8 @@ class MainViewSet(CacheMixin, GenericViewSet):
 
             if hasattr(request, "user") and hasattr(request.user, "username") and hasattr(request.user, "nick_name"):
                 user = f"{request.user.username}({request.user.nick_name})"
+            elif hasattr(request, "user") and hasattr(request.user, "app_code") and hasattr(request.user, "app_name"):
+                user = f"{request.user.app_code}({request.user.app_name})"
             else:
                 user = str(getattr(request, "user", ""))
             logger.info(

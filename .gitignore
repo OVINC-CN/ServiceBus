@@ -11,6 +11,7 @@ env
 
 # Log
 *.log
+.report
 
 # Static
 static
