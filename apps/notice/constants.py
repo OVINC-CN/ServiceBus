@@ -6,3 +6,4 @@ from core.models import TextChoices
 class NoticeWayChoices(TextChoices):
     MSG = "msg", gettext_lazy("msg")
     MAIL = "mail", gettext_lazy("mail")
+    WecomRobot = "robot", gettext_lazy("wecom robot")

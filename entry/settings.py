@@ -205,3 +205,6 @@ NOTICE_MSG_TCLOUD_KEY = os.getenv("NOTICE_MSG_TCLOUD_KEY")
 NOTICE_MSG_TCLUD_REGION = os.getenv("NOTICE_MSG_TCLUD_REGION", "ap-guangzhou")
 NOTICE_MSG_TCLOUD_APP = os.getenv("NOTICE_MSG_TCLOUD_APP")
 NOTICE_MSG_TCLOUD_SIGN = os.getenv("NOTICE_MSG_TCLOUD_SIGN")
+NOTICE_ROBOT_CONTENT_HELP = os.getenv(
+    "NOTICE_ROBOT_CONTENT_HELP", "https://developer.work.weixin.qq.com/document/path/91770"
+)

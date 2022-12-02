@@ -1,5 +1,8 @@
+from django.conf import settings
 from django.utils.translation import gettext_lazy
 from rest_framework import serializers
+
+from apps.notice.models import WecomRobot
 
 
 class NoticeRequestSerializer(serializers.Serializer):
@@ -7,7 +10,7 @@ class NoticeRequestSerializer(serializers.Serializer):
     Notice Base
     """
 
-    usernames = serializers.ListSerializer(
+    usernames = serializers.ListField(
         label=gettext_lazy("Username List"), child=serializers.CharField(label=gettext_lazy("Username"))
     )
     content = serializers.JSONField(label=gettext_lazy("Content"))
@@ -45,3 +48,24 @@ class SmsRequestSerializer(NoticeRequestSerializer):
     """
 
     content = SmsContentSerializer(label=gettext_lazy("Content"))
+
+
+class RegistryRobotSerializer(serializers.ModelSerializer):
+    """
+    registry robot
+    """
+
+    class Meta:
+        model = WecomRobot
+        fields = "__all__"
+
+
+class RobotRequestSerializer(serializers.Serializer):
+    """
+    Robot
+    """
+
+    robots = serializers.ListField(
+        label=gettext_lazy("Robot ID"), child=serializers.CharField(label=gettext_lazy("Robot ID"))
+    )
+    content = serializers.JSONField(label=gettext_lazy("Content"), help_text=settings.NOTICE_ROBOT_CONTENT_HELP)
