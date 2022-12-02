@@ -31,7 +31,7 @@ class ServiceNameHandler:
         Check if running celery worker
         """
 
-        return "celery" in sys.argv[0]
+        return "celery" in sys.argv
 
     @property
     def is_celery_beat(self) -> bool:
