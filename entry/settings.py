@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "apps.cel",
     "apps.home",
     "apps.iam",
+    "apps.notice",
     "apps.trace",
 ]
 
@@ -193,3 +194,17 @@ ENABLE_TRACE = strtobool(os.getenv("ENABLE_TRACE", "True"))
 JAEGER_HOST = os.getenv("JAEGER_HOST", "localhost")
 JAEGER_PORT = int(os.getenv("JAEGER_PORT", "6831"))
 SERVICE_NAME = os.getenv("SERVICE_NAME", APP_CODE)
+
+# Notice
+NOTICE_MAIL_HOST = os.getenv("NOTICE_MAIL_HOST")
+NOTICE_MAIL_PORT = int(os.getenv("NOTICE_MAIL_PORT", 465))
+NOTICE_MAIL_USERNAME = os.getenv("NOTICE_MAIL_USERNAME")
+NOTICE_MAIL_PASSWORD = os.getenv("NOTICE_MAIL_PASSWORD")
+NOTICE_MSG_TCLOUD_ID = os.getenv("NOTICE_MSG_TCLOUD_ID")
+NOTICE_MSG_TCLOUD_KEY = os.getenv("NOTICE_MSG_TCLOUD_KEY")
+NOTICE_MSG_TCLUD_REGION = os.getenv("NOTICE_MSG_TCLUD_REGION", "ap-guangzhou")
+NOTICE_MSG_TCLOUD_APP = os.getenv("NOTICE_MSG_TCLOUD_APP")
+NOTICE_MSG_TCLOUD_SIGN = os.getenv("NOTICE_MSG_TCLOUD_SIGN")
+NOTICE_ROBOT_CONTENT_HELP = os.getenv(
+    "NOTICE_ROBOT_CONTENT_HELP", "https://developer.work.weixin.qq.com/document/path/91770"
+)
