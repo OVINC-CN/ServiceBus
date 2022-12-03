@@ -1,17 +1,13 @@
 name: Python Test
-
 on:
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
 jobs:
-
-  build:
-
+  python:
+    name: Python Test
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.10
@@ -26,5 +22,3 @@ jobs:
         run: |
           flake8 --config .flake8
           black --line-length=120 --check .
-
-
