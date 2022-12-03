@@ -43,6 +43,7 @@ class User(SoftDeletedModel, AbstractBaseUser, PermissionsMixin):
         max_length=SHORT_CHAR_LENGTH,
         primary_key=True,
         validators=[AbstractUser.username_validator],
+        error_messages={"unique": gettext_lazy("already in use")},
     )
     nick_name = models.CharField(gettext_lazy("Nick Name"), max_length=SHORT_CHAR_LENGTH, blank=True, null=True)
     user_type = models.CharField(

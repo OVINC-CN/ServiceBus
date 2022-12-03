@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-01 14:02+0800\n"
+"POT-Creation-Date: 2022-12-03 17:06+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,6 +29,14 @@ msgstr "个人"
 #: apps/account/constants.py:12
 msgid "Platform"
 msgstr "平台"
+
+#: apps/account/constants.py:20
+msgid "Phone Number"
+msgstr "联系电话"
+
+#: apps/account/constants.py:21
+msgid "Mail Address"
+msgstr "邮件地址"
 
 #: apps/account/exceptions.py:8
 msgid "Sign In Params Not Exist"
@@ -59,31 +67,35 @@ msgid "username"
 msgstr "用户名"
 
 #: apps/account/models.py:47
+msgid "already in use"
+msgstr "已被占用"
+
+#: apps/account/models.py:50
 msgid "Nick Name"
 msgstr "用户昵称"
 
-#: apps/account/models.py:49
+#: apps/account/models.py:52
 msgid "User Type"
 msgstr "用户类型"
 
-#: apps/account/models.py:54
+#: apps/account/models.py:57
 msgid "Date Joined"
 msgstr "注册时间"
 
-#: apps/account/models.py:61 apps/account/models.py:105 apps/iam/models.py:51
+#: apps/account/models.py:64 apps/account/models.py:108 apps/iam/models.py:51
 msgid "User"
 msgstr "用户"
 
-#: apps/account/models.py:106 apps/account/serializers.py:25
+#: apps/account/models.py:109 apps/account/serializers.py:25
 #: apps/account/serializers.py:54
 msgid "Property Key"
 msgstr "配置键"
 
-#: apps/account/models.py:107
+#: apps/account/models.py:110
 msgid "Property Value"
 msgstr "配置值"
 
-#: apps/account/models.py:113
+#: apps/account/models.py:116
 msgid "User Property"
 msgstr "用户配置"
 
@@ -92,7 +104,7 @@ msgid "Property Keys"
 msgstr "配置键"
 
 #: apps/account/serializers.py:63 apps/application/serializers.py:65
-#: apps/iam/serializers/user.py:126
+#: apps/iam/serializers/user.py:126 apps/notice/serializers.py:14
 msgid "Username"
 msgstr "用户名"
 
@@ -104,33 +116,33 @@ msgstr "密码"
 msgid "Auth Token"
 msgstr "认证 Token"
 
-#: apps/application/apps.py:8 apps/application/models.py:54
-#: apps/application/models.py:80 apps/iam/models.py:15
+#: apps/application/apps.py:8 apps/application/models.py:55
+#: apps/application/models.py:86 apps/iam/models.py:15
 msgid "Application"
 msgstr "应用"
 
-#: apps/application/models.py:47
+#: apps/application/models.py:48
 msgid "App Name"
 msgstr "应用名称"
 
-#: apps/application/models.py:48 apps/application/serializers.py:58
+#: apps/application/models.py:49 apps/application/serializers.py:58
 msgid "App Code"
 msgstr "应用ID"
 
-#: apps/application/models.py:49
+#: apps/application/models.py:50
 msgid "App Secret (Encoded)"
 msgstr "应用密码(加密)"
 
-#: apps/application/models.py:79 apps/iam/models.py:14 apps/iam/models.py:33
-#: apps/iam/models.py:50
+#: apps/application/models.py:85 apps/iam/models.py:14 apps/iam/models.py:33
+#: apps/iam/models.py:50 apps/notice/models.py:13 apps/notice/models.py:31
 msgid "ID"
 msgstr "ID"
 
-#: apps/application/models.py:81
+#: apps/application/models.py:87
 msgid "Manager"
 msgstr "管理员"
 
-#: apps/application/models.py:84
+#: apps/application/models.py:90
 msgid "Application Manager"
 msgstr "应用管理员"
 
@@ -265,6 +277,85 @@ msgstr "权限ID"
 #: apps/iam/serializers/user.py:144
 msgid "Permission Status"
 msgstr "权限状态"
+
+#: apps/notice/apps.py:8
+msgid "Notice"
+msgstr "通知"
+
+#: apps/notice/constants.py:7
+msgid "msg"
+msgstr "短信"
+
+#: apps/notice/constants.py:8
+msgid "mail"
+msgstr "邮件"
+
+#: apps/notice/constants.py:9
+msgid "wecom robot"
+msgstr "企微机器人"
+
+#: apps/notice/models.py:14
+msgid "Receivers"
+msgstr "接收人"
+
+#: apps/notice/models.py:15 apps/notice/serializers.py:16
+#: apps/notice/serializers.py:25 apps/notice/serializers.py:33
+#: apps/notice/serializers.py:50 apps/notice/serializers.py:71
+msgid "Content"
+msgstr "内容"
+
+#: apps/notice/models.py:16
+msgid "Extra Params"
+msgstr "参数"
+
+#: apps/notice/models.py:17
+msgid "Result"
+msgstr "结果"
+
+#: apps/notice/models.py:18
+msgid "Send At"
+msgstr "发送时间"
+
+#: apps/notice/models.py:21
+msgid "Notice Log"
+msgstr "通知记录"
+
+#: apps/notice/models.py:32
+msgid "Webhook"
+msgstr "回调地址"
+
+#: apps/notice/models.py:33
+msgid "Name"
+msgstr "名称"
+
+#: apps/notice/models.py:36
+msgid "Wecom Robot"
+msgstr "企微机器人"
+
+#: apps/notice/serializers.py:14
+msgid "Username List"
+msgstr "用户名列表"
+
+#: apps/notice/serializers.py:24
+msgid "Title"
+msgstr "标题"
+
+#: apps/notice/serializers.py:41
+msgid "Template ID"
+msgstr "模板ID"
+
+#: apps/notice/serializers.py:42
+msgid "Params"
+msgstr "参数"
+
+#: apps/notice/serializers.py:69
+msgid "Robot ID"
+msgstr "机器人ID"
+
+#: apps/notice/utils/base.py:34
+#, python-format
+msgid "Notice Type not Exists => %s"
+msgstr "通知类型不存在 => %s"
 
 #: apps/trace/apps.py:11
 msgid "App Performance"
