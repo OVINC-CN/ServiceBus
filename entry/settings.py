@@ -182,7 +182,7 @@ AUTHENTICATION_BACKENDS = ["apps.account.backends.ModelBackend", "apps.account.b
 ENCRYPT_APP_SECRET = strtobool(os.getenv("ENCRYPT_APP_SECRET", "False"))
 
 # Celery
-CELERY_TIMEZONE = "Asia/Shanghai"
+CELERY_TIMEZONE = TIME_ZONE
 CELERY_ENABLE_UTC = False
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60

@@ -13,9 +13,10 @@ from apps.account.serializers import (
     UserPropertyDeleteSerializer,
     UserPropertyRequestSerializer,
     UserPropertySerializer,
+    UserRegistrySerializer,
     VerifyUserTokenRequestSerializer,
 )
-from core.auth import SessionAuthenticate
+from core.auth import ApplicationAuthenticate, SessionAuthenticate
 from core.utils import get_auth_token, remove_auth_token
 from core.viewsets import MainViewSet
 
@@ -150,7 +151,33 @@ class UserSignViewSet(MainViewSet):
 
         return response
 
-    @action(methods=["POST"], detail=False, authentication_classes=[])
+    @action(methods=["POST"], detail=False, authentication_classes=[SessionAuthenticate])
+    def sign_up(self, request, *args, **kwargs):
+        """
+        sign up
+        """
+
+        # validate request
+        request_serializer = UserRegistrySerializer(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        request_data = request_serializer.validated_data
+
+        # save
+        user = USER_MODEL.objects.create_user(**request_data)
+
+        # login session
+        response = Response()
+        response.set_cookie(
+            key=settings.AUTH_TOKEN_NAME,
+            value=get_auth_token(user.username, settings.SESSION_COOKIE_AGE),
+            expires=settings.SESSION_COOKIE_AGE,
+            domain=settings.SESSION_COOKIE_DOMAIN,
+        )
+
+        # response
+        return response
+
+    @action(methods=["POST"], detail=False, authentication_classes=[ApplicationAuthenticate])
     def verify_token(self, request, *args, **kwargs):
         """
         Verify User Token

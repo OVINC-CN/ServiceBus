@@ -70,3 +70,13 @@ class VerifyUserTokenRequestSerializer(serializers.Serializer):
     """
 
     token = serializers.CharField(label=gettext_lazy("Auth Token"))
+
+
+class UserRegistrySerializer(serializers.ModelSerializer):
+    """
+    User Registry
+    """
+
+    class Meta:
+        model = USER_MODEL
+        fields = "__all__"
