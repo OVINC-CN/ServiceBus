@@ -7,7 +7,6 @@ env
 # Python
 *.pyc
 *.db
-*.mo
 
 # Log
 *.log
