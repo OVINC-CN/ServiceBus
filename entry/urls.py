@@ -11,6 +11,7 @@ urlpatterns = [
     path("application/", include("apps.application.urls")),
     path("iam/", include("apps.iam.urls")),
     path("notice/", include("apps.notice.urls")),
+    path("cos/", include("apps.cos.urls")),
 ]
 
 handler400 = exceptions.bad_request

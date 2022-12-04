@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth import get_user_model
@@ -124,6 +126,8 @@ class UserSignViewSet(MainViewSet):
         user = auth.authenticate(request, **request_data)
         if not user:
             raise WrongSignInParam()
+        user.last_login = datetime.datetime.now()
+        user.save(update_fields=["last_login"])
 
         # auth session
         response = Response()
@@ -163,7 +167,7 @@ class UserSignViewSet(MainViewSet):
         request_data = request_serializer.validated_data
 
         # save
-        user = USER_MODEL.objects.create_user(**request_data)
+        user = USER_MODEL.objects.create_user(last_login=datetime.datetime.now(), **request_data)
 
         # login session
         response = Response()

@@ -17,5 +17,6 @@ class UserPropertyChoices(TextChoices):
     User Property
     """
 
+    AVATAR = "avatar", gettext_lazy("Avatar")
     PHONE_NUMBER = "phone_number", gettext_lazy("Phone Number")
     MAIL_ADDRESS = "mail_address", gettext_lazy("Mail Address")
