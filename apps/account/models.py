@@ -113,7 +113,7 @@ class UserProperty(BaseModel):
     class Meta:
         verbose_name = gettext_lazy("User Property")
         verbose_name_plural = verbose_name
-        ordering = ["-id"]
+        ordering = ["user", "property_key"]
         unique_together = [["user", "property_key"]]
 
 
