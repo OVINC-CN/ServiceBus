@@ -1,7 +1,6 @@
 #! /bin/sh
 
 mv logs/* celery-logs
-python manage.py compilemessages -l en -l zh_Hans
 python manage.py collectstatic --noinput
 python manage.py migrate --noinput
 nohup python manage.py celery worker -l INFO -f /usr/src/service-bus/celery-logs/worker.log >/dev/null 2>&1 &
