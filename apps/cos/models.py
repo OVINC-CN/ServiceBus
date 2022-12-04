@@ -16,7 +16,7 @@ class COSLog(BaseModel):
     file_size = models.IntegerField(gettext_lazy("File Size"), default=int)
     extra_params = models.TextField(gettext_lazy("Extra Params"), null=True, blank=True)
     upload_result = models.TextField(gettext_lazy("Upload Result"), null=True, blank=True)
-    upload_by = ForeignKey(gettext_lazy("上传用户"), to="account.User", on_delete=models.CASCADE)
+    upload_by = ForeignKey(gettext_lazy("Upload By"), to="account.User", on_delete=models.CASCADE)
     upload_at = models.DateTimeField(gettext_lazy("Upload At"), auto_now_add=True)
 
     class Meta:
