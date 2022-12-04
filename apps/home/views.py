@@ -29,6 +29,8 @@ class I18nViewSet(MainViewSet):
     International
     """
 
+    authentication_classes = [SessionAuthenticate]
+
     def create(self, request, *args, **kwargs):
         """
         Change Language
