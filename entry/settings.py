@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "apps.account",
     "apps.application",
     "apps.cel",
+    "apps.cos",
     "apps.home",
     "apps.iam",
     "apps.notice",
@@ -208,3 +209,12 @@ NOTICE_MSG_TCLOUD_SIGN = os.getenv("NOTICE_MSG_TCLOUD_SIGN")
 NOTICE_ROBOT_CONTENT_HELP = os.getenv(
     "NOTICE_ROBOT_CONTENT_HELP", "https://developer.work.weixin.qq.com/document/path/91770"
 )
+
+# COS
+COS_SECRET_ID = os.getenv("COS_SECRET_ID")
+COS_SECRET_KEY = os.getenv("COS_SECRET_KEY")
+COS_REGION = os.getenv("COS_REGION")
+COS_BUCKET = os.getenv("COS_BUCKET")
+COS_UNIQID_LENGTH = os.getenv("COS_UNIQID_LENGTH", 10)
+COS_DOMAIN = os.getenv("COS_DOMAIN")
+COS_FILE_PREFIX = os.getenv("COS_FILE_PREFIX", "upload")

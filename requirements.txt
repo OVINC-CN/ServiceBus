@@ -19,6 +19,7 @@ arrow==1.2.3
 
 # tencent cloud
 tencentcloud-sdk-python==3.0.785
+cos-python-sdk-v5==1.9.21
 
 # OT
 protobuf==3.19.5
