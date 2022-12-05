@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-04 16:18+0800\n"
+"POT-Creation-Date: 2022-12-05 18:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -341,8 +341,8 @@ msgid "mail"
 msgstr "邮件"
 
 #: apps/notice/constants.py:9
-msgid "wecom robot"
-msgstr "企微机器人"
+msgid "robot"
+msgstr "机器人"
 
 #: apps/notice/models.py:14
 msgid "Receivers"
@@ -375,8 +375,8 @@ msgid "Name"
 msgstr "名称"
 
 #: apps/notice/models.py:36
-msgid "Wecom Robot"
-msgstr "企微机器人"
+msgid "Robot"
+msgstr "机器人"
 
 #: apps/notice/serializers.py:14
 msgid "Username List"

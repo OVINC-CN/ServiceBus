@@ -2,7 +2,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy
 from rest_framework import serializers
 
-from apps.notice.models import WecomRobot
+from apps.notice.models import Robot
 
 
 class NoticeRequestSerializer(serializers.Serializer):
@@ -56,7 +56,7 @@ class RegistryRobotSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model = WecomRobot
+        model = Robot
         fields = "__all__"
 
 
