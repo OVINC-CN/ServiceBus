@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.notice.constants import NoticeWayChoices
-from apps.notice.models import NoticeLog, WecomRobot
+from apps.notice.models import NoticeLog, Robot
 from apps.notice.serializers import (
     MailRequestSerialzier,
     RegistryRobotSerializer,
@@ -54,9 +54,9 @@ class NoticeViewSet(MainViewSet):
         return Response()
 
     @action(methods=["POST"], detail=False)
-    def wecom_robot(self, request, *args, **kwargs):
+    def robot(self, request, *args, **kwargs):
         """
-        wecom robot
+        robot of Wecom or Feishu
         """
 
         # validate request
@@ -65,7 +65,7 @@ class NoticeViewSet(MainViewSet):
         request_data = request_serializer.validated_data
 
         # send
-        NoticeBase.send_notice(NoticeWayChoices.WecomRobot.value, **request_data)
+        NoticeBase.send_notice(NoticeWayChoices.Robot.value, **request_data)
         return Response()
 
     @action(methods=["POST"], detail=False)
@@ -77,7 +77,7 @@ class NoticeViewSet(MainViewSet):
         # get instance
         instance = None
         if request.data.get("id"):
-            instance = get_object_or_404(WecomRobot, pk=request.data.pop("id"))
+            instance = get_object_or_404(Robot, pk=request.data.pop("id"))
 
         # validate request
         request_serializer = RegistryRobotSerializer(

@@ -23,9 +23,9 @@ class NoticeLog(BaseModel):
         ordering = ["-send_at"]
 
 
-class WecomRobot(BaseModel):
+class Robot(BaseModel):
     """
-    Wecom Robot
+    Robot of Wecom or Feishu
     """
 
     id = UniqIDField(gettext_lazy("ID"))
@@ -33,6 +33,6 @@ class WecomRobot(BaseModel):
     name = models.CharField(gettext_lazy("Name"), max_length=SHORT_CHAR_LENGTH)
 
     class Meta:
-        verbose_name = gettext_lazy("Wecom Robot")
+        verbose_name = gettext_lazy("Robot")
         verbose_name_plural = verbose_name
         ordering = ["id"]

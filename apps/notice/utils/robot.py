@@ -2,14 +2,14 @@ from typing import List, Union
 
 import requests
 
-from apps.notice.models import WecomRobot
+from apps.notice.models import Robot
 from apps.notice.utils.base import NoticeBase
 from core.logger import logger
 
 
 class RobotHandler(NoticeBase):
     """
-    Wecom Robot
+    Robot
     """
 
     property_key = None
@@ -27,11 +27,11 @@ class RobotHandler(NoticeBase):
 
     def _load_receivers(self, robot_ids: List[str]) -> List[str]:
         """
-        wecom robot id
+        robot id
         """
 
         logger.info("[%s LoadReceivers] Robots => %s", self.__class__.__name__, robot_ids)
-        robots = WecomRobot.objects.filter(id__in=robot_ids)
+        robots = Robot.objects.filter(id__in=robot_ids)
         logger.info(
             "[%s LoadReceivers] Receivers => %s",
             self.__class__.__name__,
