@@ -9,8 +9,10 @@ from rest_framework.response import Response
 from apps.account.exceptions import WrongSignInParam, WrongToken
 from apps.account.models import User, UserProperty
 from apps.account.serializers import (
+    SearchUserSerializer,
     SignInSerializer,
     UserInfoSerializer,
+    UserListSerializer,
     UserPropertyCreateSerializer,
     UserPropertyDeleteSerializer,
     UserPropertyRequestSerializer,
@@ -20,7 +22,7 @@ from apps.account.serializers import (
 )
 from core.auth import ApplicationAuthenticate, SessionAuthenticate
 from core.utils import get_auth_token, remove_auth_token
-from core.viewsets import MainViewSet
+from core.viewsets import ListMixin, MainViewSet
 
 USER_MODEL: User = get_user_model()
 
@@ -199,4 +201,31 @@ class UserSignViewSet(MainViewSet):
 
         # Response
         serializer = UserInfoSerializer(instance=user)
+        return Response(serializer.data)
+
+
+class UserSearchViewSet(ListMixin, MainViewSet):
+    """
+    Search User
+    """
+
+    queryset = USER_MODEL.get_queryset()
+
+    def list(self, request, *args, **kwargs):
+        """
+        search
+        """
+
+        # validate request
+        request_serializer = SearchUserSerializer(data=request.GET)
+        request_serializer.is_valid(raise_exception=True)
+        keyword = request_serializer.validated_data["keyword"]
+
+        # queryset
+        queryset = USER_MODEL.objects.all()
+        if keyword:
+            queryset = queryset.filter(username__icontains=keyword)
+
+        # response
+        serializer = UserListSerializer(queryset, many=True)
         return Response(serializer.data)

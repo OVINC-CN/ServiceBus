@@ -80,3 +80,21 @@ class UserRegistrySerializer(serializers.ModelSerializer):
     class Meta:
         model = USER_MODEL
         fields = "__all__"
+
+
+class SearchUserSerializer(serializers.Serializer):
+    """
+    Search User
+    """
+
+    keyword = serializers.CharField(label=gettext_lazy("Keyword"), allow_blank=True)
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    """
+    Search User Response
+    """
+
+    class Meta:
+        model = USER_MODEL
+        fields = ["username", "nick_name"]
