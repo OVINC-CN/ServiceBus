@@ -43,7 +43,7 @@ class ApplicationListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Application
-        fields = ["app_name", "app_code", "managers"]
+        fields = ["app_name", "app_code", "managers", "app_logo", "app_url"]
 
     def get_managers(self, instance: Application) -> List[dict]:
         return ApplicationManagerSerializer(instance=self.context.get(instance.app_code, []), many=True).data
@@ -67,7 +67,7 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Application
-        fields = ["app_name", "app_code", "app_secret", "managers"]
+        fields = ["app_name", "app_code", "app_secret", "managers", "app_logo", "app_url"]
 
     def validate_managers(self, managers: List[str]) -> QuerySet:
         managers = USER_MODEL.objects.filter(username__in=managers)
@@ -83,7 +83,7 @@ class ApplicationUpdateRequestSerializer(ApplicationCreateSerializer):
 
     class Meta:
         model = Application
-        fields = ["app_name", "managers"]
+        fields = ["app_name", "managers", "app_logo", "app_url"]
 
     @transaction.atomic()
     def update(self, instance: Application, validated_data: dict) -> Application:
@@ -91,9 +91,11 @@ class ApplicationUpdateRequestSerializer(ApplicationCreateSerializer):
         update
         """
 
-        # update app_name
-        if validated_data.get("app_name"):
-            instance.app_name = validated_data["app_name"]
+        # update app_name, app_logo, app_url:
+        for key in ["app_name", "app_logo", "app_url"]:
+            if validated_data.get(key):
+                setattr(instance, key, validated_data[key])
+        instance.save()
 
         # update managers
         if validated_data.get("managers"):
@@ -115,7 +117,7 @@ class ApplicationUpdateResponseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Application
-        fields = ["app_name", "app_code", "managers"]
+        fields = ["app_name", "app_code", "managers", "app_logo", "app_url"]
 
     def get_managers(self, instance: Application) -> List[dict]:
         managers = ApplicationManager.objects.filter(application=instance).values("manager")

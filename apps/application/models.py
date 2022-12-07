@@ -22,13 +22,13 @@ class ApplicationObjects(SoftDeletedManager):
     """
 
     @transaction.atomic()
-    def create(self, app_name: str, app_code: str, app_secret: str, managers: List[User]) -> "Application":
+    def create(self, app_name: str, app_code: str, app_secret: str, managers: List[User], **kwargs) -> "Application":
         """
         Create Application
         """
 
         # create application
-        application = super().create(app_name=app_name, app_code=app_code)
+        application = super().create(app_name=app_name, app_code=app_code, **kwargs)
 
         # set secret
         application.set_secret(app_secret)
@@ -48,6 +48,8 @@ class Application(SoftDeletedModel):
     app_name = models.CharField(gettext_lazy("App Name"), max_length=SHORT_CHAR_LENGTH)
     app_code = models.CharField(gettext_lazy("App Code"), max_length=SHORT_CHAR_LENGTH, primary_key=True)
     app_secret = models.TextField(gettext_lazy("App Secret (Encoded)"), blank=True, null=True)
+    app_url = models.URLField(gettext_lazy("App Url"), null=True, blank=True)
+    app_logo = models.URLField(gettext_lazy("App Logo"), null=True, blank=True)
 
     objects = ApplicationObjects()
 
