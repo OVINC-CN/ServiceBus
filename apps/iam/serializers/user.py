@@ -123,7 +123,7 @@ class CheckPermissionSerializer(serializers.Serializer):
     Check Permission
     """
 
-    username = serializers.CharField(label=gettext_lazy("Username"))
+    username = serializers.CharField(label=gettext_lazy("Username"), required=False)
     permissions = PermissionItemSerializer(label=gettext_lazy("Permissions"), many=True)
 
 

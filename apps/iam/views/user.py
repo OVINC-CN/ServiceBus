@@ -1,3 +1,6 @@
+from typing import List
+
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.iam.constants import PermissionStatusChoices
@@ -13,6 +16,7 @@ from apps.iam.serializers import (
     UserPermissionListSerializer,
     UserPermissionSerializer,
 )
+from apps.iam.serializers.user import PermissionItemSerializer
 from core.auth import ApplicationAuthenticate
 from core.constants import ViewActionChoices
 from core.viewsets import CreateMixin, DestroyMixin, ListMixin, MainViewSet, UpdateMixin
@@ -172,7 +176,6 @@ class CheckPermissionViewSet(CreateMixin, MainViewSet):
 
     queryset = UserPermission.get_queryset()
     serializer_class = UserPermissionSerializer
-    authentication_classes = [ApplicationAuthenticate]
 
     def create(self, request, *args, **kwargs):
         """
@@ -180,10 +183,31 @@ class CheckPermissionViewSet(CreateMixin, MainViewSet):
         """
 
         # validate request
+        request_serializer = PermissionItemSerializer(data=request.data, many=True)
+        request_serializer.is_valid(raise_exception=True)
+        data = request_serializer.validated_data
+
+        # check
+        return self._check(request.user.username, data)
+
+    @action(methods=["POST"], detail=False, authentication_classes=[ApplicationAuthenticate])
+    def api(self, request, *args, **kwargs):
+        """
+        check permission api
+        """
+
+        # validate request
         request_serializer = CheckPermissionSerializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
-        username = request_serializer.validated_data["username"]
-        check_permissions = request_serializer.validated_data["permissions"]
+        data = request_serializer.validated_data
+
+        # check
+        return self._check(data["username"], data["permissions"])
+
+    def _check(self, username, check_permissions: List[dict]) -> Response:
+        """
+        check permission
+        """
 
         # load permission
         action_ids = [p["action"] for p in check_permissions]
@@ -212,4 +236,12 @@ class CheckPermissionViewSet(CreateMixin, MainViewSet):
             p["is_allowed"] = not bool(p["apply_instances"])
 
         # response
-        return Response(request_serializer.validated_data)
+        return Response({"username": username, "permissions": check_permissions})
+
+    @action(methods=["GET"], detail=False)
+    def is_superuser(self, request, *args, **kwargs):
+        """
+        check user is superuser
+        """
+
+        return Response({"is_superuser": request.user.is_superuser})
