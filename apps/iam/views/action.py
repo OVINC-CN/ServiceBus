@@ -42,7 +42,7 @@ class IAMActionViewSet(RetrieveMixin, ListMixin, CreateMixin, UpdateMixin, Destr
         """
 
         # validate request
-        request_serializer = ActionListRequestSerializer(data=request.GET)
+        request_serializer = ActionListRequestSerializer(data=request.query_params)
         request_serializer.is_valid(raise_exception=True)
 
         # pagination
@@ -100,7 +100,7 @@ class IAMActionViewSet(RetrieveMixin, ListMixin, CreateMixin, UpdateMixin, Destr
         """
 
         # validate request
-        request_serializer = ActionListAllRequestSerializer(data=request.GET)
+        request_serializer = ActionListAllRequestSerializer(data=request.query_params)
         request_serializer.is_valid(raise_exception=True)
 
         # response

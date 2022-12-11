@@ -41,7 +41,7 @@ class UserPermissionViewSet(ListMixin, CreateMixin, UpdateMixin, DestroyMixin, M
         """
 
         # validate request
-        request_serializer = UserPermissionListRequestSerializer(data=request.GET)
+        request_serializer = UserPermissionListRequestSerializer(data=request.query_params)
         request_serializer.is_valid(raise_exception=True)
         request_data = request_serializer.validated_data
 
@@ -126,7 +126,7 @@ class ManagerUserPermissionViewSet(ListMixin, CreateMixin, MainViewSet):
         """
 
         # validate request
-        request_serializer = ManagePermissionSerializer(data=request.GET)
+        request_serializer = ManagePermissionSerializer(data=request.query_params)
         request_serializer.is_valid(raise_exception=True)
         application_id = request_serializer.validated_data["application_id"]
 

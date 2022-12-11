@@ -101,7 +101,7 @@ class ManagePermissionPermission(BasePermission):
 
     def has_permission(self, request, view):
         if view.action in [ViewActionChoices.LIST]:
-            application_id = request.GET.get("application_id")
+            application_id = request.query_params.get("application_id")
             if ApplicationManager.objects.filter(application_id=application_id, manager=request.user).exists():
                 return True
             raise PermissionDenied(gettext("Application Manager Permission Required"))

@@ -29,7 +29,7 @@ class IAMInstanceViewSet(ListMixin, MainViewSet):
         """
 
         # validate request
-        request_serializer = InstanceListRequestSerializer(data=request.GET)
+        request_serializer = InstanceListRequestSerializer(data=request.query_params)
         request_serializer.is_valid(raise_exception=True)
 
         # pagination
@@ -54,7 +54,7 @@ class IAMInstanceViewSet(ListMixin, MainViewSet):
         """
 
         # validate request
-        request_serializer = InstanceListRequestSerializer(data=request.GET)
+        request_serializer = InstanceListRequestSerializer(data=request.query_params)
         request_serializer.is_valid(raise_exception=True)
 
         # queryset
