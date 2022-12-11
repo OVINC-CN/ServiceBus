@@ -46,9 +46,11 @@ class IAMActionViewSet(RetrieveMixin, ListMixin, CreateMixin, UpdateMixin, Destr
         request_serializer.is_valid(raise_exception=True)
 
         # pagination
-        queryset = Action.get_queryset().filter(
-            application_id=request_serializer.validated_data["application_id"]
-        ).order_by("action_id")
+        queryset = (
+            Action.get_queryset()
+            .filter(application_id=request_serializer.validated_data["application_id"])
+            .order_by("action_id")
+        )
         page = self.paginate_queryset(queryset)
 
         # data serialize

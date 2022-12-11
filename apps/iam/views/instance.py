@@ -33,8 +33,10 @@ class IAMInstanceViewSet(ListMixin, MainViewSet):
         request_serializer.is_valid(raise_exception=True)
 
         # pagination
-        queryset = Instance.get_queryset().filter(action_id=request_serializer.validated_data["action_id"]).order_by(
-            "instance_id"
+        queryset = (
+            Instance.get_queryset()
+            .filter(action_id=request_serializer.validated_data["action_id"])
+            .order_by("instance_id")
         )
         page = self.paginate_queryset(queryset)
 
@@ -56,8 +58,10 @@ class IAMInstanceViewSet(ListMixin, MainViewSet):
         request_serializer.is_valid(raise_exception=True)
 
         # queryset
-        queryset = Instance.get_queryset().filter(action_id=request_serializer.validated_data["action_id"]).order_by(
-            "instance_id"
+        queryset = (
+            Instance.get_queryset()
+            .filter(action_id=request_serializer.validated_data["action_id"])
+            .order_by("instance_id")
         )
 
         # response
