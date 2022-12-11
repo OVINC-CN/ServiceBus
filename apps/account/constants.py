@@ -1,6 +1,16 @@
+from django.conf import settings
 from django.utils.translation import gettext_lazy
 
 from core.models import TextChoices
+
+
+class UserCacheKey:
+    """
+    User Cache Key
+    """
+
+    SESSION_USER = "session-user:{username}"
+    SESSION_USER_TIMEOUT = settings.SESSION_COOKIE_AGE
 
 
 class UserTypeChoices(TextChoices):

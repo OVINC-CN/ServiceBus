@@ -31,7 +31,7 @@ class SessionAuthenticate(SessionAuthentication):
             return None
         # Get User
         try:
-            user = USER_MODEL.objects.get(username=username)
+            user = USER_MODEL.objects.get_cache_user(username=username)
         except USER_MODEL.DoesNotExist:
             return None
         setattr(user, AUTH_TOKEN_CHECK_KEY, True)

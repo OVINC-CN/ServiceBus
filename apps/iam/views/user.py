@@ -43,11 +43,13 @@ class UserPermissionViewSet(ListMixin, CreateMixin, UpdateMixin, DestroyMixin, M
         # validate request
         request_serializer = UserPermissionListRequestSerializer(data=request.GET)
         request_serializer.is_valid(raise_exception=True)
+        request_data = request_serializer.validated_data
 
         # page
-        queryset = self.queryset.filter(
-            user=request.user, action__application_id=request_serializer.validated_data["application_id"]
-        ).select_related("action")
+        queryset = self.queryset.filter(user=request.user, action__application_id=request_data["application_id"])
+        if request_data["action_id"]:
+            queryset = queryset.filter(action_id=request_data["action_id"])
+        queryset = queryset.select_related("action").order_by("-status", "-update_at")
         page = self.paginate_queryset(queryset)
 
         # instance data
@@ -59,7 +61,7 @@ class UserPermissionViewSet(ListMixin, CreateMixin, UpdateMixin, DestroyMixin, M
 
         # serialize
         serializer = UserPermissionListSerializer(page, many=True, context=instance_map)
-        return Response(serializer.data)
+        return self.get_paginated_response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         """
@@ -146,7 +148,7 @@ class ManagerUserPermissionViewSet(ListMixin, CreateMixin, MainViewSet):
 
         # response
         serializer = UserPermissionListSerializer(page, many=True, context=instance_map)
-        return Response(serializer.data)
+        return self.get_paginated_response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         """
@@ -160,7 +162,7 @@ class ManagerUserPermissionViewSet(ListMixin, CreateMixin, MainViewSet):
         status = request_serializer.validated_data["status"]
 
         # save
-        queryset = UserPermission.objects.filter(id=permission_id, status=PermissionStatusChoices.DEALING)
+        queryset = UserPermission.objects.filter(id=permission_id)
         if status == PermissionStatusChoices.ALLOWED.value:
             queryset.update(status=status)
         elif status == PermissionStatusChoices.DENIED.value:

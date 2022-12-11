@@ -15,7 +15,7 @@ class Action(BaseModel):
     application = ForeignKey(gettext_lazy("Application"), to="application.Application", on_delete=models.CASCADE)
     action_id = models.CharField(gettext_lazy("Action ID"), max_length=SHORT_CHAR_LENGTH)
     action_name = models.CharField(gettext_lazy("Action Name"), max_length=SHORT_CHAR_LENGTH)
-    resource_name = models.CharField(gettext_lazy("Resource Name"), max_length=SHORT_CHAR_LENGTH)
+    resource_name = models.CharField(gettext_lazy("Resource Name"), max_length=SHORT_CHAR_LENGTH, null=True, blank=True)
     description = models.TextField(gettext_lazy("Description"), null=True, blank=True)
 
     class Meta:
