@@ -45,7 +45,7 @@ class ApplicationViewSet(ListMixin, CreateMixin, UpdateMixin, DestroyMixin, Main
         """
 
         # pagination
-        page = self.paginate_queryset(self.queryset)
+        page = self.paginate_queryset(Application.get_queryset())
 
         # manager info
         manager_map = defaultdict(list)
@@ -106,10 +106,11 @@ class ApplicationViewSet(ListMixin, CreateMixin, UpdateMixin, DestroyMixin, Main
         request_data = request_serializer.validated_data
 
         # filter
+        queryset = Application.get_queryset()
         if request_data["is_manager"]:
             managed_apps = ApplicationManager.objects.filter(manager=request.user).values("application")
-            self.queryset = self.queryset.filter(app_code__in=managed_apps)
+            queryset = queryset.filter(app_code__in=managed_apps)
 
         # response
-        serializer = self.get_serializer(self.queryset, many=True)
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

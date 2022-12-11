@@ -46,7 +46,7 @@ class UserPermissionViewSet(ListMixin, CreateMixin, UpdateMixin, DestroyMixin, M
         request_data = request_serializer.validated_data
 
         # page
-        queryset = self.queryset.filter(user=request.user, action__application_id=request_data["application_id"])
+        queryset = UserPermission.get_queryset().filter(user=request.user, action__application_id=request_data["application_id"])
         if request_data["action_id"]:
             queryset = queryset.filter(action_id=request_data["action_id"])
         queryset = queryset.select_related("action").order_by("-status", "-update_at")

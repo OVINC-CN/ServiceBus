@@ -46,10 +46,10 @@ class IAMActionViewSet(RetrieveMixin, ListMixin, CreateMixin, UpdateMixin, Destr
         request_serializer.is_valid(raise_exception=True)
 
         # pagination
-        self.queryset = self.queryset.filter(
+        queryset = Action.get_queryset().filter(
             application_id=request_serializer.validated_data["application_id"]
         ).order_by("action_id")
-        page = self.paginate_queryset(self.queryset)
+        page = self.paginate_queryset(queryset)
 
         # data serialize
         serializer = ActionInfoSerializer(page, many=True)
@@ -102,5 +102,5 @@ class IAMActionViewSet(RetrieveMixin, ListMixin, CreateMixin, UpdateMixin, Destr
         request_serializer.is_valid(raise_exception=True)
 
         # response
-        queryset = self.queryset.filter(application_id=request_serializer.validated_data["application_id"])
+        queryset = Action.get_queryset().filter(application_id=request_serializer.validated_data["application_id"])
         return Response(ActionInfoSerializer(queryset, many=True).data)
