@@ -14,6 +14,16 @@ class InstanceSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class InstanceAllSerializer(serializers.ModelSerializer):
+    """
+    Instance Simple Info
+    """
+
+    class Meta:
+        model = Instance
+        fields = ["id", "instance_id", "instance_name"]
+
+
 class InstanceListRequestSerializer(serializers.Serializer):
     """
     Instance List

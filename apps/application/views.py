@@ -11,6 +11,7 @@ from apps.application.permissions import (
     ApplicationManagePermission,
 )
 from apps.application.serializers import (
+    ApplicationAllRequestSerializer,
     ApplicationCreateSerializer,
     ApplicationListSerializer,
     ApplicationSerializer,
@@ -32,7 +33,7 @@ class ApplicationViewSet(ListMixin, CreateMixin, UpdateMixin, DestroyMixin, Main
     serializer_class = ApplicationSerializer
 
     def get_permissions(self):
-        if self.action in [ViewActionChoices.LIST]:
+        if self.action in [ViewActionChoices.LIST, "all"]:
             return []
         if self.action in [ViewActionChoices.UPDATE, ViewActionChoices.PARTIAL_UPDATE]:
             return [ApplicationManagePermission()]
@@ -93,11 +94,22 @@ class ApplicationViewSet(ListMixin, CreateMixin, UpdateMixin, DestroyMixin, Main
         serializer = ApplicationUpdateResponseSerializer(instance)
         return Response(serializer.data)
 
-    @action(methods=["GET"], detail=False)
+    @action(methods=["GET"], detail=False, pagination_class=None)
     def all(self, request, *args, **kwargs):
         """
         list all applications
         """
 
-        self.pagination_class = None
-        return super().list(request, *args, **kwargs)
+        # validate request
+        request_serializer = ApplicationAllRequestSerializer(data=request.GET)
+        request_serializer.is_valid(raise_exception=True)
+        request_data = request_serializer.validated_data
+
+        # filter
+        if request_data["is_manager"]:
+            managed_apps = ApplicationManager.objects.filter(manager=request.user).values("application")
+            self.queryset = self.queryset.filter(app_code__in=managed_apps)
+
+        # response
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)

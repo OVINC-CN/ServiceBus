@@ -1,3 +1,4 @@
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.iam.models import Instance
@@ -8,6 +9,7 @@ from apps.iam.serializers import (
     InstanceSerializer,
     InstanceUpdateSerializer,
 )
+from apps.iam.serializers.instance import InstanceAllSerializer
 from core.auth import ApplicationAuthenticate
 from core.constants import ViewActionChoices
 from core.viewsets import CreateMixin, DestroyMixin, ListMixin, MainViewSet, UpdateMixin
@@ -31,7 +33,9 @@ class IAMInstanceViewSet(ListMixin, MainViewSet):
         request_serializer.is_valid(raise_exception=True)
 
         # pagination
-        self.queryset = self.queryset.filter(action_id=request_serializer.validated_data["action_id"])
+        self.queryset = self.queryset.filter(action_id=request_serializer.validated_data["action_id"]).order_by(
+            "instance_id"
+        )
         page = self.paginate_queryset(self.queryset)
 
         # data serialize
@@ -40,6 +44,25 @@ class IAMInstanceViewSet(ListMixin, MainViewSet):
 
         # response
         return self.get_paginated_response(data)
+
+    @action(methods=["GET"], detail=False)
+    def all(self, request, *args, **kwargs):
+        """
+        All Instance
+        """
+
+        # validate request
+        request_serializer = InstanceListRequestSerializer(data=request.GET)
+        request_serializer.is_valid(raise_exception=True)
+
+        # queryset
+        self.queryset = self.queryset.filter(action_id=request_serializer.validated_data["action_id"]).order_by(
+            "instance_id"
+        )
+
+        # response
+        serializer = InstanceAllSerializer(self.queryset, many=True)
+        return Response(serializer.data)
 
 
 class IAMInstanceAppViewSet(CreateMixin, UpdateMixin, DestroyMixin, MainViewSet):

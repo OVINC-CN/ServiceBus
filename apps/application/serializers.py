@@ -34,6 +34,14 @@ class ApplicationManagerSerializer(serializers.ModelSerializer):
         fields = ["username", "nick_name"]
 
 
+class ApplicationAllRequestSerializer(serializers.Serializer):
+    """
+    Application List Request
+    """
+
+    is_manager = serializers.BooleanField(label=gettext_lazy("Is Manager"), default=False)
+
+
 class ApplicationListSerializer(serializers.ModelSerializer):
     """
     Application List

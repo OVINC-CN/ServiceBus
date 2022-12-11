@@ -24,6 +24,7 @@ class UserPermissionListRequestSerializer(serializers.Serializer):
     """
 
     application_id = serializers.CharField(label=gettext_lazy("Application ID"))
+    action_id = serializers.CharField(label=gettext_lazy("Action ID"), default="")
 
 
 class UserPermissionListSerializer(serializers.ModelSerializer):
