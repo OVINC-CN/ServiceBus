@@ -6,6 +6,7 @@ from django.db.models import ManyToManyField as _ManyToManyField
 from django.db.models import QuerySet
 from django.db.models import TextChoices as _TextChoices
 from django.utils.translation import gettext_lazy
+from rest_framework.request import Request as _Request
 
 from core.utils import uniq_id_without_time
 
@@ -161,3 +162,27 @@ class SoftDeletedModel(BaseModel):
     def delete(self, *args, **kwargs) -> None:
         self.is_deleted = True
         self.save()
+
+
+class RequestMock(_Request):
+    """
+    Mock for Request
+    """
+
+    def __init__(self, user, params: dict, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_query_params = params
+        self._init_data = params
+        self._init_user = user
+
+    @property
+    def user(self):
+        return self._init_user
+
+    @property
+    def query_params(self) -> dict:
+        return self._init_query_params
+
+    @property
+    def data(self) -> dict:
+        return self._init_data
