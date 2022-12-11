@@ -58,7 +58,7 @@ class UserPropertyViewSet(MainViewSet):
         """
 
         # Validate Request Data
-        request_serializer = UserPropertyRequestSerializer(data=request.GET)
+        request_serializer = UserPropertyRequestSerializer(data=request.query_params)
         request_serializer.is_valid(raise_exception=True)
         request_data = request_serializer.validated_data
 
@@ -217,7 +217,7 @@ class UserSearchViewSet(ListMixin, MainViewSet):
         """
 
         # validate request
-        request_serializer = SearchUserSerializer(data=request.GET)
+        request_serializer = SearchUserSerializer(data=request.query_params)
         request_serializer.is_valid(raise_exception=True)
         keyword = request_serializer.validated_data["keyword"]
 

@@ -101,7 +101,7 @@ class ApplicationViewSet(ListMixin, CreateMixin, UpdateMixin, DestroyMixin, Main
         """
 
         # validate request
-        request_serializer = ApplicationAllRequestSerializer(data=request.GET)
+        request_serializer = ApplicationAllRequestSerializer(data=request.query_params)
         request_serializer.is_valid(raise_exception=True)
         request_data = request_serializer.validated_data
 
