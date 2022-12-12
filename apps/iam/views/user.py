@@ -1,5 +1,6 @@
 from typing import List
 
+from django.contrib.auth import get_user_model
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -8,18 +9,21 @@ from apps.iam.models import Action, Instance, UserPermission
 from apps.iam.permissions import ManagePermissionPermission, UserPermissionSelf
 from apps.iam.serializers import (
     ApplyPermissionSerializer,
+    AuthPermissionSerializer,
     CheckPermissionSerializer,
     ManagePermissionApplySerializer,
     ManagePermissionSerializer,
+    PermissionItemSerializer,
     UpdatePermissionSerializer,
     UserPermissionListRequestSerializer,
     UserPermissionListSerializer,
     UserPermissionSerializer,
 )
-from apps.iam.serializers.user import PermissionItemSerializer
 from core.auth import ApplicationAuthenticate
 from core.constants import ViewActionChoices
 from core.viewsets import CreateMixin, DestroyMixin, ListMixin, MainViewSet, UpdateMixin
+
+USER_MODEL = get_user_model()
 
 
 class UserPermissionViewSet(ListMixin, CreateMixin, UpdateMixin, DestroyMixin, MainViewSet):
@@ -118,7 +122,11 @@ class ManagerUserPermissionViewSet(ListMixin, CreateMixin, MainViewSet):
 
     queryset = UserPermission.get_queryset()
     serializer_class = UserPermissionSerializer
-    permission_classes = [ManagePermissionPermission]
+
+    def get_permissions(self):
+        if self.action in ["auth"]:
+            return []
+        return [ManagePermissionPermission()]
 
     def list(self, request, *args, **kwargs):
         """
@@ -171,6 +179,39 @@ class ManagerUserPermissionViewSet(ListMixin, CreateMixin, MainViewSet):
             queryset.delete()
 
         return Response()
+
+    @action(methods=["POST"], detail=False, authentication_classes=[ApplicationAuthenticate])
+    def auth(self, request, *args, **kwargs):
+        """
+        auth permission
+        """
+
+        # validate request
+        request_serializer = AuthPermissionSerializer(data=request.data, context={"application": request.user})
+        request_serializer.is_valid(raise_exception=True)
+        request_data = request_serializer.validated_data
+
+        # get exist permission
+        permission = UserPermission.objects.filter(user=request_data["user"], action=request_data["action"]).first()
+
+        # if exists, update
+        if permission:
+            permission.instances = list(set(permission.instances) | set(request_data["instances"]))
+            permission.all_instances = request_data["all_instances"]
+            permission.save(update_fields=["instances", "all_instances", "update_at"])
+        # if not exists, create and set allowed
+        else:
+            permission = UserPermission.objects.create(
+                user=request_data["user"],
+                action=request_data["action"],
+                instances=request_data["instances"],
+                all_instances=request_data["all_instances"],
+                status=PermissionStatusChoices.ALLOWED,
+            )
+
+        # response
+        serializer = UserPermissionSerializer(permission)
+        return Response(serializer.data)
 
 
 class CheckPermissionViewSet(CreateMixin, MainViewSet):

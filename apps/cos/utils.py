@@ -5,8 +5,8 @@ from django.core.files.uploadedfile import TemporaryUploadedFile
 from qcloud_cos import CosConfig, CosS3Client
 from rest_framework.request import Request
 
+from apps.cos.exceptions import UploadFileFailed
 from apps.cos.models import COSLog
-from core.exceptions import UploadFileFailed
 from core.logger import logger
 from core.utils import simple_uniq_id
 

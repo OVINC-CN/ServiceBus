@@ -1,11 +1,17 @@
 from typing import List
 
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy
 from rest_framework import serializers
 
+from apps.account.exceptions import UserNotExist
+from apps.account.models import User
 from apps.iam.constants import PermissionStatusChoices
-from apps.iam.models import Instance, UserPermission
+from apps.iam.exceptions import ActionDoesNotExist
+from apps.iam.models import Action, Instance, UserPermission
 from apps.iam.serializers import InstanceSerializer
+
+USER_MODEL: User = get_user_model()
 
 
 class UserPermissionSerializer(serializers.ModelSerializer):
@@ -143,3 +149,35 @@ class ManagePermissionApplySerializer(serializers.Serializer):
 
     permission_id = serializers.CharField(label=gettext_lazy("Permission ID"))
     status = serializers.ChoiceField(label=gettext_lazy("Permission Status"), choices=PermissionStatusChoices.choices)
+
+
+class AuthPermissionSerializer(serializers.Serializer):
+    """
+    Auth Permission
+    """
+
+    user = serializers.CharField(label=gettext_lazy("User"))
+    action = serializers.CharField(label=gettext_lazy("Action"))
+    instances = serializers.ListField(
+        label=gettext_lazy("Instances"), child=serializers.CharField(label=gettext_lazy("Instance ID"))
+    )
+    all_instances = serializers.BooleanField(label=gettext_lazy("All Instances"))
+
+    def validate(self, attrs: dict) -> dict:
+        data = super().validate(attrs)
+        data["instances"] = list(
+            Instance.objects.filter(action=data["action"], id__in=data["instances"]).values_list("id", flat=True)
+        )
+        return data
+
+    def validate_user(self, user: str) -> USER_MODEL:
+        try:
+            return USER_MODEL.objects.get(username=user)
+        except USER_MODEL.DoesNotExist:
+            raise serializers.ValidationError(str(UserNotExist.default_detail))
+
+    def validate_action(self, action: str) -> Action:
+        try:
+            return Action.objects.get(id=action, application=self.context["application"])
+        except Action.DoesNotExist:
+            raise serializers.ValidationError(str(ActionDoesNotExist.default_detail))
