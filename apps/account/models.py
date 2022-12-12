@@ -5,12 +5,11 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, AnonymousUser, PermissionsMixin
 from django.contrib.auth.models import UserManager as _UserManager
-from django.core.cache import cache
 from django.db import models, transaction
 from django.db.models import QuerySet
 from django.utils.translation import gettext, gettext_lazy
 
-from apps.account.constants import UserCacheKey, UserTypeChoices
+from apps.account.constants import UserTypeChoices
 from core.constants import MEDIUM_CHAR_LENGTH, SHORT_CHAR_LENGTH
 from core.logger import logger
 from core.models import BaseModel, ForeignKey, SoftDeletedManager, SoftDeletedModel
@@ -32,21 +31,6 @@ class UserManager(SoftDeletedManager, _UserManager):
     def create_superuser(self, username, nick_name=None, password=None, **extra_fields):
         extra_fields["is_superuser"] = True
         self.create_user(username, nick_name, password, **extra_fields)
-
-    def get_cache_user(self, username: str) -> "User":
-        """
-        get cached user or create cached user
-        """
-
-        # get user first
-        cache_key = self.model.session_cache_key(username)
-        user = cache.get(cache_key)
-        if user:
-            return user
-        # create cache if not exist
-        user = self.get(username=username)
-        cache.set(cache_key, user, self.model.session_cache_timeout())
-        return self.get_cache_user(username)
 
 
 class User(SoftDeletedModel, AbstractBaseUser, PermissionsMixin):
@@ -112,45 +96,6 @@ class User(SoftDeletedModel, AbstractBaseUser, PermissionsMixin):
         _properties = UserProperty.objects.filter(property_key__in=property_keys, user=self)
         logger.info("[UserProperty Deleting] User => %s; Properties => %s", str(self), ",".join(property_keys))
         _properties.delete()
-
-    @classmethod
-    def session_cache_key(cls, username) -> str:
-        """
-        Session Cache Key
-        """
-
-        return UserCacheKey.SESSION_USER.format(username=username)
-
-    @classmethod
-    def session_cache_timeout(cls) -> int:
-        """
-        Session Cache Age
-        """
-
-        return UserCacheKey.SESSION_USER_TIMEOUT
-
-    def clean_session_cache(self) -> None:
-        """
-        Cleand Session Cache
-        """
-
-        cache.delete(self.session_cache_key(self.username))
-
-    def save(self, *args, **kwargs) -> None:
-        """
-        Save User
-        """
-
-        self.clean_session_cache()
-        return super().save()
-
-    def delete(self, *args, **kwargs) -> None:
-        """
-        Delete User
-        """
-
-        self.clean_session_cache()
-        return super().delete(*args, **kwargs)
 
 
 class UserProperty(BaseModel):

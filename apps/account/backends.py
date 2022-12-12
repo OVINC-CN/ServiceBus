@@ -21,7 +21,7 @@ class ModelBackend(_ModelBackend):
             return None
         # Retrieve User
         try:
-            user = USER_MODEL.objects.get_cache_user(username=username)
+            user = USER_MODEL.objects.get_cache_instance(username)
         except USER_MODEL.DoesNotExist:
             return None
         # Check Password
