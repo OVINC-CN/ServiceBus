@@ -115,7 +115,7 @@ REDIS_PASSWORD = getenv_or_raise("REDIS_PASSWORD")
 REDIS_DB = int(getenv_or_raise("REDIS_DB"))
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}",
     }
 }
@@ -159,7 +159,7 @@ SESSION_COOKIE_DOMAIN = os.getenv("SESSION_COOKIE_DOMAIN")
 AUTH_TOKEN_NAME = os.getenv("AUTH_TOKEN_NAME", f"{'dev-' if DEBUG else ''}{APP_CODE}-auth-token")
 
 # Log
-LOG_LEVEL = "INFO"
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 LOG_DIR = os.path.join(BASE_DIR, "logs")
 LOGGING = get_logging_config_dict(LOG_LEVEL, LOG_DIR)
 
