@@ -63,11 +63,7 @@ class UserPropertyViewSet(MainViewSet):
         request_data = request_serializer.validated_data
 
         # Filter Properties
-        properties = (
-            request.user.list_properties(request_data["key"])
-            if request_data.get("key")
-            else request.user.list_properties()
-        )
+        properties = request.user.list_properties(request_data.get("key"))
 
         # Response Data
         serializer = UserPropertySerializer(instance=properties, many=True)

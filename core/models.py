@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.cache import cache
 from django.db import models
 from django.db.models import CharField
 from django.db.models import ForeignKey as _ForeignKey
@@ -101,12 +103,36 @@ class ManyToManyField(_ManyToManyField):
         )
 
 
+class BaseModelManager(models.Manager):
+    """
+    Base Model Manager
+    """
+
+    def get_cache_instance(self, pk: str) -> "models.Model":
+        """
+        get cached instance or create cached instance
+        """
+
+        # get cache first
+        cache_key = self.model.cache_key(pk)
+        instance = cache.get(cache_key)
+        if instance:
+            return instance
+
+        # create cache if not exist
+        instance = self.get(pk=pk)
+        cache.set(cache_key, instance, self.model.cache_timeout)
+        return self.get_cache_instance(instance)
+
+
 class BaseModel(models.Model):
     """
     Base Model
     """
 
-    objects = models.Manager()
+    objects = BaseModelManager()
+    _objects = models.Manager()
+    cache_timeout = settings.SESSION_COOKIE_AGE
 
     class Meta:
         abstract = True
@@ -118,11 +144,26 @@ class BaseModel(models.Model):
     def get_queryset(cls) -> QuerySet:
         return cls.objects.all()
 
+    def save(self, *args, **kwargs) -> None:
+        self.remove_cache()
+        return super().save()
+
+    def delete(self, *args, **kwargs) -> None:
+        self.remove_cache()
+        return super().delete(*args, **kwargs)
+
     def get_name(self) -> str:
         return str(self)
 
+    @classmethod
+    def cache_key(cls, pk: str) -> str:
+        return f"model-cache:{cls.__name__}:{pk}"
 
-class SoftDeletedManager(models.Manager):
+    def remove_cache(self) -> None:
+        cache.delete(self.cache_key(self.pk))
+
+
+class SoftDeletedManager(BaseModelManager):
     """
     Soft Delete Model Manager
     """
@@ -160,6 +201,7 @@ class SoftDeletedModel(BaseModel):
         return cls.objects.filter(is_deleted=False)
 
     def delete(self, *args, **kwargs) -> None:
+        self.remove_cache()
         self.is_deleted = True
         self.save()
 
