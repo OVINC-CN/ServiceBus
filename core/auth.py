@@ -31,7 +31,7 @@ class SessionAuthenticate(SessionAuthentication):
             return None
         # Get User
         try:
-            user = USER_MODEL.objects.get_cache_user(username=username)
+            user = USER_MODEL.objects.get_cache_instance(username)
         except USER_MODEL.DoesNotExist:
             return None
         setattr(user, AUTH_TOKEN_CHECK_KEY, True)
@@ -69,7 +69,7 @@ class ApplicationAuthenticate(BaseAuthentication):
             raise AppAuthFailed(gettext("App Auth Params Not Exist"))
         # varify app
         try:
-            app = Application.objects.get(app_code=app_code)
+            app = Application.objects.get_cache_instance(app_code)
         except Application.DoesNotExist:
             raise AppAuthFailed(gettext("App Not Exist"))
         # verify secret
