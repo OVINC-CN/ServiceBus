@@ -42,9 +42,9 @@ class Instance(BaseModel):
         unique_together = [["action", "instance_id"]]
 
 
-class UserPermission(BaseModel):
+class UserPermissionBase(BaseModel):
     """
-    User Permission
+    User Permission Base
     """
 
     id = UniqIDField(gettext_lazy("ID"))
@@ -57,11 +57,34 @@ class UserPermission(BaseModel):
         max_length=SHORT_CHAR_LENGTH,
         choices=PermissionStatusChoices.choices,
         default=PermissionStatusChoices.DEALING,
+        db_index=True,
     )
     update_at = models.DateTimeField(gettext_lazy("Update At"), auto_now=True)
 
     class Meta:
+        abstract = True
+
+
+class UserPermission(UserPermissionBase):
+    """
+    User Permission
+    """
+
+    class Meta:
         verbose_name = gettext_lazy("User Permission")
+        verbose_name_plural = verbose_name
+        ordering = ["action", "-update_at"]
+        index_together = [["user", "action", "status"]]
+        unique_together = [["user", "action"]]
+
+
+class UserPermissionSnapshot(UserPermissionBase):
+    """
+    User Permission Snapshot
+    """
+
+    class Meta:
+        verbose_name = gettext_lazy("User Permission Snapshot")
         verbose_name_plural = verbose_name
         ordering = ["action", "-update_at"]
         index_together = [["user", "action", "status"]]
