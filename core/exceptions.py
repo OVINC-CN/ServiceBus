@@ -156,8 +156,3 @@ class AuthTokenInvalid(APIException):
 class AppAuthFailed(APIException):
     status_code = status.HTTP_403_FORBIDDEN
     default_detail = gettext_lazy("App Auth Failed")
-
-
-class UploadFileFailed(APIException):
-    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-    default_detail = gettext_lazy("Upload File Failed")

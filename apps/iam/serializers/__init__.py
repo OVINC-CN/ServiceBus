@@ -6,6 +6,8 @@ from apps.iam.serializers.action import (
     ActionUpdateSerializer,
 )
 from apps.iam.serializers.instance import (
+    BulkInstanceSerializer,
+    InstanceAllSerializer,
     InstanceCreateSerializer,
     InstanceListRequestSerializer,
     InstanceSerializer,
@@ -13,9 +15,11 @@ from apps.iam.serializers.instance import (
 )
 from apps.iam.serializers.user import (
     ApplyPermissionSerializer,
+    AuthPermissionSerializer,
     CheckPermissionSerializer,
     ManagePermissionApplySerializer,
     ManagePermissionSerializer,
+    PermissionItemSerializer,
     UpdatePermissionSerializer,
     UserPermissionListRequestSerializer,
     UserPermissionListSerializer,
@@ -40,4 +44,8 @@ __all__ = [
     "CheckPermissionSerializer",
     "ManagePermissionSerializer",
     "ManagePermissionApplySerializer",
+    "AuthPermissionSerializer",
+    "PermissionItemSerializer",
+    "BulkInstanceSerializer",
+    "InstanceAllSerializer",
 ]
