@@ -1,6 +1,5 @@
 import abc
 
-from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext
 from rest_framework.permissions import BasePermission
 
@@ -107,11 +106,9 @@ class ManagePermissionPermission(BasePermission):
                 return True
             raise PermissionDenied(gettext("Application Manager Permission Required"))
         if view.action in [ViewActionChoices.CREATE]:
-            permission_id = request.data.get("permission_id")
-            permission = get_object_or_404(UserPermission, id=permission_id)
-            if ApplicationManager.objects.filter(
-                application=permission.action.application, manager=request.user
-            ).exists():
+            managed_apps = ApplicationManager.objects.filter(manager=request.user).values_list("application")
+            actions = Action.objects.filter(application__in=managed_apps)
+            if UserPermission.objects.filter(id=request.data.get("permission_id"), action__in=actions).exists():
                 return True
             raise PermissionDenied(gettext("Application Manager Permission Required"))
         raise PermissionDenied()

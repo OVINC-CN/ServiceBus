@@ -1,11 +1,13 @@
 from typing import List
 
 from django.contrib.auth import get_user_model
+from django.db import transaction
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.iam.constants import PermissionStatusChoices
-from apps.iam.models import Action, Instance, UserPermission
+from apps.iam.models import Action, Instance, UserPermission, UserPermissionSnapshot
 from apps.iam.permissions import ManagePermissionPermission, UserPermissionSelf
 from apps.iam.serializers import (
     ApplyPermissionSerializer,
@@ -19,6 +21,7 @@ from apps.iam.serializers import (
     UserPermissionListSerializer,
     UserPermissionSerializer,
 )
+from apps.iam.utils import sync_snapshot, update_snapshot
 from core.auth import ApplicationAuthenticate
 from core.constants import ViewActionChoices
 from core.viewsets import CreateMixin, DestroyMixin, ListMixin, MainViewSet, UpdateMixin
@@ -160,6 +163,7 @@ class ManagerUserPermissionViewSet(ListMixin, CreateMixin, MainViewSet):
         serializer = UserPermissionListSerializer(page, many=True, context=instance_map)
         return self.get_paginated_response(serializer.data)
 
+    @transaction.atomic()
     def create(self, request, *args, **kwargs):
         """
         deal apply
@@ -172,14 +176,17 @@ class ManagerUserPermissionViewSet(ListMixin, CreateMixin, MainViewSet):
         status = request_serializer.validated_data["status"]
 
         # save
-        queryset = UserPermission.objects.filter(id=permission_id)
+        permission = get_object_or_404(UserPermission, id=permission_id, status=PermissionStatusChoices.DEALING.value)
+        permission.status = status
+        permission.save(update_fields=["status"])
         if status == PermissionStatusChoices.ALLOWED.value:
-            queryset.update(status=status)
+            sync_snapshot([permission.id], PermissionStatusChoices.ALLOWED.value)
         elif status == PermissionStatusChoices.DENIED.value:
-            queryset.delete()
+            sync_snapshot([permission_id], PermissionStatusChoices.DENIED.value)
 
         return Response()
 
+    @transaction.atomic()
     @action(methods=["POST"], detail=False, authentication_classes=[ApplicationAuthenticate])
     def auth(self, request, *args, **kwargs):
         """
@@ -199,6 +206,7 @@ class ManagerUserPermissionViewSet(ListMixin, CreateMixin, MainViewSet):
             permission.instances = list(set(permission.instances) | set(request_data["instances"]))
             permission.all_instances = request_data["all_instances"]
             permission.save(update_fields=["instances", "all_instances", "update_at"])
+            update_snapshot(permission.id, request_data["instances"], request_data["all_instances"])
         # if not exists, create and set allowed
         else:
             permission = UserPermission.objects.create(
@@ -208,6 +216,7 @@ class ManagerUserPermissionViewSet(ListMixin, CreateMixin, MainViewSet):
                 all_instances=request_data["all_instances"],
                 status=PermissionStatusChoices.ALLOWED,
             )
+            sync_snapshot([permission.id], PermissionStatusChoices.ALLOWED.value)
 
         # response
         serializer = UserPermissionSerializer(permission)
@@ -258,14 +267,14 @@ class CheckPermissionViewSet(CreateMixin, MainViewSet):
         action_ids = [p["action"] for p in check_permissions]
         allowed_permissions_map = {
             p.action_id: p
-            for p in UserPermission.objects.filter(
+            for p in UserPermissionSnapshot.objects.filter(
                 user_id=username, action_id__in=action_ids, status=PermissionStatusChoices.ALLOWED
             )
         }
 
         # check permission
         for p in check_permissions:
-            allowed_permission: UserPermission = allowed_permissions_map.get(p["action"])
+            allowed_permission: UserPermissionSnapshot = allowed_permissions_map.get(p["action"])
             # none match
             if not allowed_permission:
                 p["is_allowed"] = False

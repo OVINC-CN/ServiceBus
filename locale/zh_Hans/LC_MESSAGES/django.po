@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-12 22:20+0800\n"
+"POT-Creation-Date: 2022-12-13 01:41+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -254,7 +254,7 @@ msgstr "语言ID非法"
 msgid "Language Code"
 msgstr "语言ID"
 
-#: apps/iam/apps.py:8 apps/iam/models.py:64
+#: apps/iam/apps.py:8 apps/iam/models.py:74
 msgid "User Permission"
 msgstr "用户权限"
 
@@ -323,24 +323,29 @@ msgstr "全部实例"
 msgid "Status"
 msgstr "状态"
 
-#: apps/iam/models.py:61
+#: apps/iam/models.py:62
 msgid "Update At"
 msgstr "更新时间"
 
-#: apps/iam/permissions.py:23 apps/iam/permissions.py:39
-#: apps/iam/permissions.py:108 apps/iam/permissions.py:116
+#: apps/iam/models.py:87
+msgid "User Permission Snapshot"
+msgstr "用户权限快照"
+
+#: apps/iam/permissions.py:22 apps/iam/permissions.py:38
+#: apps/iam/permissions.py:107 apps/iam/permissions.py:113
 msgid "Application Manager Permission Required"
 msgstr "需要应用管理员权限"
 
-#: apps/iam/permissions.py:73 apps/iam/permissions.py:84
+#: apps/iam/permissions.py:72 apps/iam/permissions.py:83
 msgid "Unauthorized App for Action"
 msgstr "未授权应用"
 
-#: apps/iam/permissions.py:95
+#: apps/iam/permissions.py:94
 msgid "You are not allowed to update this permission"
 msgstr "禁止更新该权限"
 
-#: apps/iam/permissions.py:133
+#: apps/iam/permissions.py:130
+#, python-format
 msgid "Action Not Exist %s"
 msgstr "操作不存在 %s"
 

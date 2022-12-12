@@ -1,7 +1,9 @@
+import time
 from functools import wraps
 
 from django.core.cache import cache
 
+from apps.cel.constants import CELERY_RETRY_SLEEP
 from core.logger import logger
 
 
@@ -36,9 +38,10 @@ class LockKey:
 
 
 class TaskLock:
-    def __init__(self, func: callable, lock_key: LockKey.__class__ = LockKey, *args, **kwargs):
+    def __init__(self, func: callable, lock_key: LockKey.__class__ = LockKey, retry: bool = False, *args, **kwargs):
         self.func = func
         self.lock_key = lock_key(func, *args, **kwargs)
+        self.retry = retry
         self.args = args
         self.kwargs = kwargs
 
@@ -50,6 +53,8 @@ class TaskLock:
         # check status
         if not self.set_status():
             logger.warning("[TaskLockExecuteTask] Duplicate => %s", self.func)
+            if self.retry:
+                self.retry_task()
             return
 
         # run task
@@ -67,6 +72,11 @@ class TaskLock:
         # clean status
         finally:
             self.clean_status()
+
+    def retry_task(self):
+        result = self.args[0].delay(*self.args[1:], **self.kwargs)
+        time.sleep(CELERY_RETRY_SLEEP)
+        logger.info("[TaskLockExecuteTask] Retry => %s; Result => %s", self.func, result)
 
     @property
     def cache_key(self) -> str:
@@ -99,7 +109,7 @@ class TaskLock:
         cache.delete(self.cache_key)
 
 
-def task_lock(func: callable = None, lock_key: LockKey.__class__ = LockKey):
+def task_lock(func: callable = None, lock_key: LockKey.__class__ = LockKey, retry: bool = False):
     """
     wait task finished
     """
@@ -108,7 +118,7 @@ def task_lock(func: callable = None, lock_key: LockKey.__class__ = LockKey):
     def wrapper(task: callable):
         @wraps(task)
         def warp_func(*args, **kwargs):
-            TaskLock(task, lock_key, *args, **kwargs)()
+            TaskLock(task, lock_key, retry, *args, **kwargs)()
 
         return warp_func
 
