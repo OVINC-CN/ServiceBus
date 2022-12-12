@@ -1,15 +1,21 @@
+from django.db import transaction
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.iam.models import Instance
-from apps.iam.permissions import IAMActionAppPermission, IAMActionObjAppPermission
+from apps.iam.permissions import (
+    BulkSaveInstancePermission,
+    IAMActionAppPermission,
+    IAMActionObjAppPermission,
+)
 from apps.iam.serializers import (
+    BulkInstanceSerializer,
+    InstanceAllSerializer,
     InstanceCreateSerializer,
     InstanceListRequestSerializer,
     InstanceSerializer,
     InstanceUpdateSerializer,
 )
-from apps.iam.serializers.instance import InstanceAllSerializer
 from core.auth import ApplicationAuthenticate
 from core.constants import ViewActionChoices
 from core.viewsets import CreateMixin, DestroyMixin, ListMixin, MainViewSet, UpdateMixin
@@ -83,6 +89,8 @@ class IAMInstanceAppViewSet(CreateMixin, UpdateMixin, DestroyMixin, MainViewSet)
             return [IAMActionAppPermission()]
         if self.action in [ViewActionChoices.UPDATE, ViewActionChoices.PARTIAL_UPDATE, ViewActionChoices.DESTROY]:
             return [IAMActionObjAppPermission()]
+        if self.action in ["bulk_save"]:
+            return [BulkSaveInstancePermission()]
         return []
 
     def create(self, request, *args, **kwargs):
@@ -117,3 +125,65 @@ class IAMInstanceAppViewSet(CreateMixin, UpdateMixin, DestroyMixin, MainViewSet)
 
         # response
         return Response(InstanceSerializer(instance).data)
+
+    @action(methods=["POST"], detail=False)
+    def bulk_save(self, request, *args, **kwargs):
+        """
+        bulk create or update instance
+        """
+
+        # validate_request
+        request_serializer = BulkInstanceSerializer(data=request.data, many=True)
+        request_serializer.is_valid(raise_exception=True)
+        request_data = request_serializer.validated_data
+
+        # save
+        data = self._bulk_save(request_data)
+
+        # response
+        serializer = InstanceSerializer(instance=data, many=True)
+        return Response(serializer.data)
+
+    @transaction.atomic()
+    def _bulk_save(self, data: list) -> list:
+        """
+        bulk create
+        """
+
+        # init response
+        result = []
+
+        # split data
+        to_update = {}
+        to_create = []
+        for instance in data:
+            if instance.get("id"):
+                to_update[instance["id"]] = instance
+            else:
+                to_create.append(instance)
+
+        # do create
+        if to_create:
+            result.extend(
+                Instance.objects.bulk_create(
+                    [
+                        Instance(
+                            action_id=_instance["action_id"],
+                            instance_id=_instance["instance_id"],
+                            instance_name=_instance["instance_name"],
+                        )
+                        for _instance in to_create
+                    ]
+                )
+            )
+
+        # do update
+        if to_update:
+            db_instances = Instance.objects.filter(id__in=to_update.keys())
+            for _instance in db_instances:
+                for _key, _val in to_update[_instance.id].items():
+                    setattr(_instance, _key, _val)
+            Instance.objects.bulk_update(db_instances, fields=["instance_id", "instance_name"])
+            result.extend(db_instances)
+
+        return result
