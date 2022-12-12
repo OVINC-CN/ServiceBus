@@ -106,7 +106,7 @@ class IAMInstanceAppViewSet(CreateMixin, UpdateMixin, DestroyMixin, MainViewSet)
         request_serializer.save()
 
         # response
-        return Response()
+        return Response(request_serializer.data)
 
     def update(self, request, *args, **kwargs):
         """
