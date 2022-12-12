@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 19:48+0800\n"
+"POT-Creation-Date: 2022-12-12 22:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,44 +62,45 @@ msgstr "Token 不存在"
 msgid "Wrong Token"
 msgstr "Token 错误"
 
-#: apps/account/models.py:26
+#: apps/account/models.py:25
 msgid "Username Cannot be Empty"
 msgstr "用户名不能为空"
 
-#: apps/account/models.py:58
+#: apps/account/models.py:42
 msgid "username"
 msgstr "用户名"
 
-#: apps/account/models.py:62
+#: apps/account/models.py:46
 msgid "already in use"
 msgstr "已被占用"
 
-#: apps/account/models.py:64
+#: apps/account/models.py:48
 msgid "Nick Name"
 msgstr "用户昵称"
 
-#: apps/account/models.py:66
+#: apps/account/models.py:50
 msgid "User Type"
 msgstr "用户类型"
 
-#: apps/account/models.py:71
+#: apps/account/models.py:55
 msgid "Date Joined"
 msgstr "注册时间"
 
-#: apps/account/models.py:78 apps/account/models.py:161 apps/iam/models.py:51
+#: apps/account/models.py:62 apps/account/models.py:106 apps/iam/models.py:51
+#: apps/iam/serializers/user.py:159
 msgid "User"
 msgstr "用户"
 
-#: apps/account/models.py:162 apps/account/serializers.py:25
+#: apps/account/models.py:107 apps/account/serializers.py:25
 #: apps/account/serializers.py:54
 msgid "Property Key"
 msgstr "配置键"
 
-#: apps/account/models.py:163
+#: apps/account/models.py:108
 msgid "Property Value"
 msgstr "配置值"
 
-#: apps/account/models.py:169
+#: apps/account/models.py:114
 msgid "User Property"
 msgstr "用户配置"
 
@@ -108,7 +109,7 @@ msgid "Property Keys"
 msgstr "配置键"
 
 #: apps/account/serializers.py:63 apps/application/serializers.py:73
-#: apps/iam/serializers/user.py:127 apps/notice/serializers.py:14
+#: apps/iam/serializers/user.py:133 apps/notice/serializers.py:14
 msgid "Username"
 msgstr "用户名"
 
@@ -150,7 +151,8 @@ msgid "App Logo"
 msgstr "应用图标"
 
 #: apps/application/models.py:87 apps/cos/models.py:13 apps/iam/models.py:14
-#: apps/iam/models.py:33 apps/iam/models.py:50 apps/notice/models.py:13
+#: apps/iam/models.py:33 apps/iam/models.py:50
+#: apps/iam/serializers/instance.py:60 apps/notice/models.py:13
 #: apps/notice/models.py:31
 msgid "ID"
 msgstr "ID"
@@ -194,6 +196,10 @@ msgstr "管理员不能为空"
 #: apps/cos/apps.py:8
 msgid "COS"
 msgstr "对象存储"
+
+#: apps/cos/exceptions.py:8
+msgid "Upload File Failed"
+msgstr "上传失败"
 
 #: apps/cos/models.py:14
 msgid "File Name"
@@ -264,33 +270,39 @@ msgstr "已授权"
 msgid "dealing"
 msgstr "处理中"
 
+#: apps/iam/exceptions.py:8
+msgid "Action Not Exist"
+msgstr "操作不存在"
+
 #: apps/iam/models.py:16 apps/iam/serializers/instance.py:32
-#: apps/iam/serializers/user.py:27 apps/iam/serializers/user.py:35
-#: apps/iam/serializers/user.py:116
+#: apps/iam/serializers/user.py:33 apps/iam/serializers/user.py:41
+#: apps/iam/serializers/user.py:122
 msgid "Action ID"
 msgstr "操作ID"
 
-#: apps/iam/models.py:17 apps/iam/serializers/user.py:36
+#: apps/iam/models.py:17 apps/iam/serializers/user.py:42
 msgid "Action Name"
 msgstr "操作名称"
 
-#: apps/iam/models.py:18 apps/iam/serializers/user.py:37
+#: apps/iam/models.py:18 apps/iam/serializers/user.py:43
 msgid "Resource Name"
 msgstr "资源名称"
 
-#: apps/iam/models.py:19 apps/iam/serializers/user.py:38
+#: apps/iam/models.py:19 apps/iam/serializers/user.py:44
 msgid "Description"
 msgstr "描述"
 
 #: apps/iam/models.py:22 apps/iam/models.py:34 apps/iam/models.py:52
+#: apps/iam/serializers/instance.py:61 apps/iam/serializers/user.py:160
 msgid "Action"
 msgstr "操作"
 
-#: apps/iam/models.py:35 apps/iam/serializers/user.py:118
+#: apps/iam/models.py:35 apps/iam/serializers/instance.py:62
+#: apps/iam/serializers/user.py:124 apps/iam/serializers/user.py:162
 msgid "Instance ID"
 msgstr "实例ID"
 
-#: apps/iam/models.py:36
+#: apps/iam/models.py:36 apps/iam/serializers/instance.py:63
 msgid "Instance Name"
 msgstr "实例名称"
 
@@ -298,12 +310,12 @@ msgstr "实例名称"
 msgid "Resource"
 msgstr "资源"
 
-#: apps/iam/models.py:53 apps/iam/serializers/user.py:39
-#: apps/iam/serializers/user.py:118
+#: apps/iam/models.py:53 apps/iam/serializers/user.py:45
+#: apps/iam/serializers/user.py:124 apps/iam/serializers/user.py:162
 msgid "Instances"
 msgstr "实例"
 
-#: apps/iam/models.py:54
+#: apps/iam/models.py:54 apps/iam/serializers/user.py:164
 msgid "All Instances"
 msgstr "全部实例"
 
@@ -315,33 +327,37 @@ msgstr "状态"
 msgid "Update At"
 msgstr "更新时间"
 
-#: apps/iam/permissions.py:22 apps/iam/permissions.py:38
-#: apps/iam/permissions.py:107 apps/iam/permissions.py:115
+#: apps/iam/permissions.py:23 apps/iam/permissions.py:39
+#: apps/iam/permissions.py:108 apps/iam/permissions.py:116
 msgid "Application Manager Permission Required"
 msgstr "需要应用管理员权限"
 
-#: apps/iam/permissions.py:72 apps/iam/permissions.py:83
+#: apps/iam/permissions.py:73 apps/iam/permissions.py:84
 msgid "Unauthorized App for Action"
 msgstr "未授权应用"
 
-#: apps/iam/permissions.py:94
+#: apps/iam/permissions.py:95
 msgid "You are not allowed to update this permission"
 msgstr "禁止更新该权限"
 
+#: apps/iam/permissions.py:133
+msgid "Action Not Exist %s"
+msgstr "操作不存在 %s"
+
 #: apps/iam/serializers/action.py:22 apps/iam/serializers/action.py:50
-#: apps/iam/serializers/user.py:26 apps/iam/serializers/user.py:136
+#: apps/iam/serializers/user.py:32 apps/iam/serializers/user.py:142
 msgid "Application ID"
 msgstr "应用ID"
 
-#: apps/iam/serializers/user.py:128
+#: apps/iam/serializers/user.py:134
 msgid "Permissions"
 msgstr "权限"
 
-#: apps/iam/serializers/user.py:144
+#: apps/iam/serializers/user.py:150
 msgid "Permission ID"
 msgstr "权限ID"
 
-#: apps/iam/serializers/user.py:145
+#: apps/iam/serializers/user.py:151
 msgid "Permission Status"
 msgstr "权限状态"
 
@@ -500,11 +516,7 @@ msgstr "认证 Token 非法"
 msgid "App Auth Failed"
 msgstr "应用鉴权失败"
 
-#: core/exceptions.py:163
-msgid "Upload File Failed"
-msgstr "上传失败"
-
-#: core/models.py:149
+#: core/models.py:191
 msgid "Soft Delete"
 msgstr "软删除"
 
