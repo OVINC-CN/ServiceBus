@@ -30,7 +30,8 @@ SECRET_KEY = getenv_or_raise("APP_SECRET")
 
 # Hosts
 ALLOWED_HOSTS = [getenv_or_raise("BACKEND_HOST")]
-CORS_ALLOW_CREDENTIALS = os.getenv("CORS_ALLOW_CREDENTIALS", True)
+CORS_ALLOW_CREDENTIALS = strtobool(os.getenv("CORS_ALLOW_CREDENTIALS", "True"))
+CORS_ORIGIN_ALLOW_ALL = strtobool(os.getenv("CORS_ORIGIN_ALLOW_ALL", "True"))
 CORS_ORIGIN_WHITELIST = [getenv_or_raise("FRONTEND_URL")]
 CSRF_TRUSTED_ORIGINS = [getenv_or_raise("FRONTEND_URL")]
 FRONTEND_URL = getenv_or_raise("FRONTEND_URL")
