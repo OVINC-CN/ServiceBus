@@ -15,6 +15,7 @@ class Action(BaseModel):
     application = ForeignKey(gettext_lazy("Application"), to="application.Application", on_delete=models.CASCADE)
     action_id = models.CharField(gettext_lazy("Action ID"), max_length=SHORT_CHAR_LENGTH)
     action_name = models.CharField(gettext_lazy("Action Name"), max_length=SHORT_CHAR_LENGTH)
+    resource_id = models.CharField(gettext_lazy("Resource ID"), max_length=SHORT_CHAR_LENGTH, null=True, blank=True)
     resource_name = models.CharField(gettext_lazy("Resource Name"), max_length=SHORT_CHAR_LENGTH, null=True, blank=True)
     description = models.TextField(gettext_lazy("Description"), null=True, blank=True)
 
@@ -31,7 +32,8 @@ class Instance(BaseModel):
     """
 
     id = UniqIDField(gettext_lazy("ID"))
-    action = ForeignKey(gettext_lazy("Action"), to="iam.Action", on_delete=models.CASCADE)
+    application = ForeignKey(gettext_lazy("Application"), to="application.Application", on_delete=models.CASCADE)
+    resource_id = models.CharField(gettext_lazy("Resource ID"), max_length=SHORT_CHAR_LENGTH, null=True, blank=True)
     instance_id = models.CharField(gettext_lazy("Instance ID"), max_length=SHORT_CHAR_LENGTH)
     instance_name = models.CharField(gettext_lazy("Instance Name"), max_length=SHORT_CHAR_LENGTH)
 
@@ -39,7 +41,7 @@ class Instance(BaseModel):
         verbose_name = gettext_lazy("Resource")
         verbose_name_plural = verbose_name
         ordering = ["id"]
-        unique_together = [["action", "instance_id"]]
+        unique_together = [["application", "resource_id", "instance_id"]]
 
 
 class UserPermissionBase(BaseModel):
