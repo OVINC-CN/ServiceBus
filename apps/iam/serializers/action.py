@@ -39,7 +39,7 @@ class ActionUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Action
-        fields = ["action_name", "resource_name", "description"]
+        fields = ["action_name", "resource_id", "resource_name", "description"]
 
 
 class ActionListAllRequestSerializer(serializers.Serializer):

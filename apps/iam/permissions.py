@@ -4,7 +4,6 @@ from django.utils.translation import gettext
 from rest_framework.permissions import BasePermission
 
 from apps.application.models import ApplicationManager
-from apps.iam.exceptions import ActionDoesNotExist
 from apps.iam.models import Action, UserPermission
 from core.constants import ViewActionChoices
 from core.exceptions import PermissionDenied
@@ -60,25 +59,13 @@ class IAMUpdatePermission(ManageObjPermissionBase):
         return obj.application.app_code
 
 
-class IAMActionAppPermission(BasePermission):
-    """
-    IAM Action App Permission
-    """
-
-    def has_permission(self, request, view):
-        action = request.data.get("action", int())
-        if Action.objects.filter(application=request.user, pk=action).exists():
-            return True
-        raise PermissionDenied(gettext("Unauthorized App for Action"))
-
-
 class IAMActionObjAppPermission(BasePermission):
     """
     IAM Action Obj App Permission
     """
 
     def has_object_permission(self, request, view, obj):
-        if obj.action.application == request.user:
+        if obj.application == request.user:
             return True
         raise PermissionDenied(gettext("Unauthorized App for Action"))
 
@@ -112,19 +99,3 @@ class ManagePermissionPermission(BasePermission):
                 return True
             raise PermissionDenied(gettext("Application Manager Permission Required"))
         raise PermissionDenied()
-
-
-class BulkSaveInstancePermission(BasePermission):
-    """
-    Bulk Save Instance Permission
-    """
-
-    def has_permission(self, request, view):
-        action_ids = {instance["action_id"] for instance in request.data if instance.get("action_id")}
-        actions = list(
-            Action.objects.filter(id__in=action_ids, application=request.user).values_list("action_id", flat=True)
-        )
-        if len(action_ids) == len(actions):
-            return True
-        un_auth_action = list(set(action_ids) - set(actions))
-        raise ActionDoesNotExist(gettext("Action Not Exist %s") % un_auth_action)

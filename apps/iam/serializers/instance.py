@@ -50,14 +50,3 @@ class InstanceUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instance
         fields = ["instance_name"]
-
-
-class BulkInstanceSerializer(serializers.Serializer):
-    """
-    Bulk Save Instance
-    """
-
-    id = serializers.CharField(label=gettext_lazy("ID"), required=False)
-    action_id = serializers.CharField(label=gettext_lazy("Action"))
-    instance_id = serializers.CharField(label=gettext_lazy("Instance ID"))
-    instance_name = serializers.CharField(label=gettext_lazy("Instance Name"))
