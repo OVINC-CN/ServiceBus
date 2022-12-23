@@ -111,9 +111,11 @@ class UpdatePermissionSerializer(serializers.ModelSerializer):
         attrs = super().validate(attrs)
         if attrs.get("instances"):
             attrs["instances"] = list(
-                Instance.objects.filter(pk__in=attrs["instances"], action=self.instance.action).values_list(
-                    "id", flat=True
-                )
+                Instance.objects.filter(
+                    pk__in=attrs["instances"],
+                    application=self.instance.action.application,
+                    resource_id=self.instance.action.resource_id,
+                ).values_list("id", flat=True)
             )
         return attrs
 
@@ -170,7 +172,11 @@ class AuthPermissionSerializer(serializers.Serializer):
     def validate(self, attrs: dict) -> dict:
         data = super().validate(attrs)
         data["instances"] = list(
-            Instance.objects.filter(action=data["action"], id__in=data["instances"]).values_list("id", flat=True)
+            Instance.objects.filter(
+                application=attrs["action"].application,
+                resource_id=attrs["action"].resource_id,
+                id__in=data["instances"],
+            ).values_list("id", flat=True)
         )
         return data
 
